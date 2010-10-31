@@ -1,0 +1,9 @@
+I am sorry, but requested page not found =(
+
+Maybe you entered wrong address?
+
+If you got this page by following link, it's my error, I'll fix it in nearest time.
+
+And now you may use search:
+
+<r:snippet name="search-google" />

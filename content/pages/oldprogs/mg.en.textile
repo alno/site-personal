@@ -1,0 +1,3 @@
+It was implemented using OpenGL rendering engine with usage of Nvidia Cg language for vertex and pixel shaders. Program was implemented for the Winndows using Visual Studio. Several times after it I wished to port it to Linux, but it wasn't done yet.
+
+To render objects all the vertex data was stored in video memory by using corresponding OpenGL extensions. For fast model loading (which was found in free libraries over the net) i developed special file format where data was stored similarly to its memory representation. And, it was necessary to write model in this format, so i developed special 3DS MAX plugin.

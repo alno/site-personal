@@ -1,5 +1,6 @@
 <r:layout name="base">
   <r:unless_url matches="^/$"><h1><r:title /></h1></r:unless_url>
+  <r:snippet name="images" />
   <r:if_content part="right"><div class="right"><r:content part="right" /></div></r:if_content>
 
   <r:content_for_layout />

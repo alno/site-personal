@@ -1,0 +1,12 @@
+<div class="entry">
+  <h2><r:link /></h2>
+  <div class="entry-meta">
+    <span class="post-meta-date"><r:date format="%B %d, %Y" /></span>
+    <span class="post-meta-time"><r:date format="%H:%m" /></span>
+    <span class="post-meta-category"><r:tag_list /></span>
+    <span class="post-meta-comments"><a href="<r:url />#comments" title="Комментарий к записи <r:title />">Комментариев: <r:comments:count /></a></span>
+  </div>
+  <r:snippet name="floatgal" />
+  <p><r:content /></p>
+  <r:if_content part="extended"><r:link anchor="extended">Читать дальше &raquo;</r:link></r:if_content>
+</div>

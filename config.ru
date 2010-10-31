@@ -1,3 +1,3 @@
-require 'application.rb'
+require 'lib/application.rb'
 
 run Application

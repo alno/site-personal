@@ -1,0 +1,34 @@
+<r:inside_layout name="base">
+  <div id="post-navigation-top">
+    <r:next><r:if_url matches="^/\d{4}/.*$"><div class="prev"><r:link /> &raquo;</div></r:if_url></r:next>
+    <r:previous><r:if_url matches="^/\d{4}/.*$"><div class="next">&laquo; <r:link /></div></r:if_url></r:previous>
+  </div><div class="entry">
+    <r:unless_url matches="^/$"><h1><r:snippet name="title" /></h1></r:unless_url>
+    <div class="entry-tags">Тэги: <r:tag_list /></div>
+    <r:snippet name="floatgal" />
+
+    <r:content />
+
+    <r:if_content part="extended"><div id="extended">
+      <r:content part="extended" />
+    </div></r:if_content>
+
+    <r:if_content part="related"><div id="related">
+      <h2><r:if cond="url matches /.*\/en/">Related articles</r:if><r:unless cond="url matches /.*\/en/">Записи на схожие темы</r:unless></h2>
+      <r:content part="related" />
+    </div></r:if_content>
+
+    <r:if_content part="links"><div id="links">
+      <h2><r:if cond="url matches /.*\/en/">Links</r:if><r:unless cond="url matches /.*\/en/">Ссылки</r:unless></h2>
+      <r:content part="links" />
+    </div></r:if_content>
+
+    <p style="text-align: center;">
+      <a href="http://feeds2.feedburner.com/alno" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png" alt="" style="border: 0pt none ; vertical-align: middle;"></a>&nbsp;<a href="http://feeds2.feedburner.com/alno" rel="alternate" type="application/rss+xml">Подписаться на RSS</a>
+    </p>
+
+    <p style="text-align: center;">
+      <r:snippet name="buttons-share" />
+    </p>
+  </div>
+</r:inside_layout>

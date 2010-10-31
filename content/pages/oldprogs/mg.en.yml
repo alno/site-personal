@@ -1,0 +1,11 @@
+title: Computer Graphics Task
+description: |
+  <p>This is my university task on computer graphics course, which was developed on second year (in 2005/2006).</p>
+
+  <p>Before it, I studied environment rendering algorithms (terrain, water and sky). So, this work became most complex of what I developed in this area. And it became final for now.</p>
+images:
+  - mg/render0.jpg
+  - mg/render1.jpg
+  - mg/render2.jpg
+  - mg/render3.jpg
+  - mg/render4.jpg
