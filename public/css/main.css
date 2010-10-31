@@ -1,0 +1,303 @@
+a {
+    color: #3256B6;
+}
+
+a:visited {
+    color: #cc9;
+}
+
+a:hover, a:visited:hover {
+    color: #e00;
+    text-decoration: none;
+}
+
+body {
+    background-color: #2F2F2F;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 80%;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+h1 {
+    font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    font-size: 250%;
+    font-weight: normal;
+}
+
+h3 {
+    color: #999;
+    font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    font-size: 180%;
+    font-weight: normal;
+    margin-top: 1.5em;
+    margin-bottom: .5em;
+}
+
+.hidden {
+    display: none;
+}
+
+.clear {
+    clear: both;
+}
+
+#page {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    text-align: left;
+}
+
+#header {
+    background-color: #637E9F;
+    color: white;
+    font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    padding: 30px;
+    text-align: left;
+}
+
+#site-title {
+    color: white;
+    font-size: 325%;
+}
+
+#site-title a, #site-title a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+#site-title a:hover, #site-title a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+#site-subtitle {
+    font-style: italic;
+    letter-spacing: 2px;
+}
+
+#main {
+    background-color: white;
+    border-bottom: 4px solid #fc0;
+    float: left;
+    width: 100%;
+}
+
+#content-wrapper {
+    float: left;
+    width: 70%;
+}
+
+#content {
+    padding: 25px;
+    border-right: 1px dotted #a3a39c;
+}
+
+#content h1 {
+    margin-top: 0;
+}
+
+#content h3 a {
+    border-bottom: 1px dotted #a3a39c;
+    display: block;
+    padding-bottom: 2px;
+    text-decoration: none;
+}
+
+#content p {
+    line-height: 160%;
+}
+
+#content .info {
+    color: #b0af99;
+    font-size: 80%;
+    margin-top: 1.5em;
+}
+
+#content .entry .info {
+    margin-top: 1em;
+}
+
+#content .first.entry {
+    background-color: #f7f3e8;
+    margin: -25px;
+    margin-bottom: 0;
+    padding: 25px;
+}
+
+#content .first.entry h3 {
+    margin-top: 0.25em;
+}
+
+#sidebar-wrapper {
+    float: right;
+    width: 30%;
+}
+
+#sidebar {
+    font-size: 90%;
+    padding: 15px;
+    padding-top: 0px;
+}
+
+#sidebar h3 {
+    font-size: 160%;
+}
+
+#sidebar p {
+    line-height: 140%;
+}
+
+#sidebar ul {
+    margin-left: 1.5em;
+    padding: 0;
+}
+
+#sidebar li {
+    margin-bottom: .25em;
+}
+
+#footer {
+    color: #AFAFAF;
+    float: left;
+    font-size: 90%;
+    padding-top: 1px;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+#content .floatgal {
+    float: right;
+    padding: 10px;
+}
+
+#content img {
+    vertical-align: middle;
+}
+
+#menu {
+    clear: both;
+    height: 1.9em;
+    padding: 0;
+    margin: 0;
+}
+
+#menu ol {
+    float: left;
+    list-style-type: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#menu ol li {
+    float: left;
+    padding: 0;
+    margin: 0;
+}
+
+#menu ol li.first {
+    margin-left: 2em;
+}
+
+#menu ol li a {
+    display: block;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin: 0pt;
+    padding: 0.25em 1em 0.2em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#menu ol li a:hover {
+    background: transparent url(images/bg_menu.png) repeat-x scroll 0pt 50%;
+}
+
+#menu ol li ul {
+    left: -999em;
+    list-style-type: none;
+    position: absolute;
+    width: 15em;
+}
+
+#menu ol li:hover ul, #menu ol li.sfhover ul {
+    left: auto;
+}
+
+#menu ol li ul li a, #menu ol li ul li.current_page_item a {
+    text-align: left;
+    width: 10em;
+}
+
+#menu {
+    background: #667088 none repeat scroll 0% 0%;
+}
+
+#menu ol li a {
+    background: #667088 none repeat scroll 0% 0%;
+    color: #CCCCCC;
+    text-decoration: none;
+}
+
+#menu ol li a:hover {
+    background-color: #505050;
+    color: #FFFFFF;
+}
+
+#menu ol li.current_page_item a {
+    background: #FFFFFF none repeat scroll 0% 0%;
+    color: #000000;
+}
+
+#menu ol li.current_page_item a:hover {
+    background: #EEEEEE none repeat scroll 0% 0% !important;
+    color: #000000;
+}
+
+#menu ol li ul li a {
+    background: #777777 none repeat scroll 0% 0% !important;
+    color: #CCCCCC;
+}
+
+#menu ol li ul li a:hover {
+    background: #777777 none repeat scroll 0% 0% !important;
+    color: #FFFFFF;
+}
+
+#menu ol li.current_page_item ul li a {
+    background: #EEEEEE none repeat scroll 0% 0% !important;
+    color: #000000;
+}
+
+#menu ol li.current_page_item ul li a:hover {
+    background: #EEEEEE none repeat scroll 0% 0% !important;
+    color: #000000;
+}
+
+.right {
+    float: right;
+}
+
+.vcard {
+    border: 1px solid #ccc;
+    background: #fff;
+    padding: 10px;
+    margin: 10px;
+}
+
+.vcard .email, .vcard .fn {
+    display: block;
+}
+
+.vcard .adr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.certs {
+    margin: 10px;
+    text-align: right;
+}
