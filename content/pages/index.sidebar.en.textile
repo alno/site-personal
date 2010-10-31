@@ -1,0 +1,27 @@
+h3. About me
+
+My name is Alexey Noskov, I am postgraduate student of Computational Mathematics and Cybernetics. "More...":http://alno.name/en/author/
+
+h3. About site
+
+I use this site as a place for organizing information about my small projects, old programs and some possibly useful in future materials.
+
+Also i have a blog about programming at "blog.alno.name":http://blog.alno.name/ .
+
+<r:find url="/projects">
+  <h3><r:title /></h3>
+  <ul>
+  <r:children:each>
+    <li><r:link /></li>
+  </r:children:each>
+  </ul>
+</r:find>
+
+<r:find url="/oldprogs">
+  <h3><r:title /></h3>
+  <ul>
+  <r:children:each>
+    <li><r:link /></li>
+  </r:children:each>
+  </ul>
+</r:find>
