@@ -1,0 +1,6 @@
+title: Events Plasma Runner
+description: |
+  <p>Плагин для KRunner на рабочем столе KDE4, с помощью которого можно очень быстро добавлять события и задачи в календарь. Например: <i>event Meet my friend; tomorrow 12:30</i> или <i>todo Do something; in 5 weeks from today</i></p>
+keywords: kde, plasma, runner
+images:
+  - events-runner/events-runner-1.png

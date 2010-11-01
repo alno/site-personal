@@ -1,0 +1,18 @@
+В KDE4 имеется замечательная штука - KRunner - вы нажимаете Alt+F2, вводите команду, он ее распознает и по нажатию Enter выполняет. Самое банальное использование - это запуск приложений по началу названия. Кроме всего прочего, возможные команды могут быть расширены за счет плагинов.
+
+И вечером 18 января я встретил на KDE Brainstorm <a rel="" href="http://forum.kde.org/brainstorm.php#idea85167">замечательную идею</a> интеграции KRunner с календарем, с тем, чтобы иметь возможность добавлять события или задачи путем ввода текста в каком-то простом и понятном формате.
+
+В итоге и появился Events Plasma Runner, в котором можно вводить команды следующего вида:
+* _event Project deadline; 13.02.2010_
+* _todo Complete my work; tomorrow 12:30_
+* _event Something; 13:30_
+* _event Other event; yesterday_
+* _todo Buy new phone; in 2 years_
+* _todo Complete site design; in 2 days from 10:30_
+
+h3. Краткая информация
+
+* Лицензия: GPL
+* Исходный код: "http://github.com/alno/plasma-runner-events":http://github.com/alno/plasma-runner-events
+* Страница на www.kde-apps.org: "http://www.kde-look.org/content/show.php/show.php?content=89524":http://www.kde-look.org/content/show.php/show.php?content=89524
+* Бинарные пакеты для Ubuntu доступны в моем PPA: "https://launchpad.net/~alexey-noskov/+archive/kde":https://launchpad.net/~alexey-noskov/+archive/kde

@@ -1,0 +1,5 @@
+h3. Краткая информация
+
+* Сайт проекта: "http://freeforms.ru/":http://freeforms.ru/
+* Язык реализации: "Ruby":http://www.ruby-lang.org/
+* Фреймворк: "Ruby On Rails":http://rubyonrails.org/
