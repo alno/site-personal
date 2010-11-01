@@ -1,5 +1,5 @@
 title: One Line Calculator
-description: Виджет для рабочего стола KDE4 (Plasma), который позволяет вычислять произвольные выражения в текстовом поле на рабочем столе или в панели.
+description: <p>Виджет для рабочего стола KDE4 (Plasma), который позволяет вычислять произвольные выражения в текстовом поле на рабочем столе или в панели.</p>
 keywords: kde, kde4, plasma, qtscript, qt, qscriptengine, desktop, widget, plasmoid
 images:
   - onelinecalc/onelinecalc.png

@@ -1,5 +1,5 @@
 title: Thrift Plugin для Eclipse
-description: Плагин для IDE Eclipse, предоставляющий редактор для Thrift-файлов.
+description: <p>Плагин для IDE Eclipse, предоставляющий редактор для Thrift-файлов.</p>
 keywords: eclipse, plugin, thrift, rpc
 images:
   - eclipse-thrift/thrift-editor.png
