@@ -1,0 +1,10 @@
+There was a very useful calculator in KDE3 built-in in the panel. It was possible simply to enter "2+2", press Enter and its content was changed to "4". However, there was not something similar in KDE4. There is Qualculate, but it has some drawbacks for me.
+
+To solve this problem I created One Line Calculator. It's plasma widget which behaves similar to KDE3 panel calculator: you enter experssion, press Enter and calculator evauluate  it. Also, there are some additional features - as evaulation implemented through QScriptEngine in ECMAScript, you may extend set of defined functions in configuration dialog and make it suitable for your specific needs.
+
+h3. Project information
+
+* License: GPL
+* Source code: "http://github.com/alno/plasma-widget-onelinecalc":http://github.com/alno/plasma-widget-onelinecalc
+* Page on www.kde-look.org: "http://www.kde-look.org/content/show.php/show.php?content=89524":http://www.kde-look.org/content/show.php/show.php?content=89524
+* Ubuntu packages are in my PPA: "https://launchpad.net/~alexey-noskov/+archive/kde":https://launchpad.net/~alexey-noskov/+archive/kde

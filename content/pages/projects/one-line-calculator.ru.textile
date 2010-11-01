@@ -1,0 +1,11 @@
+Помнится, в KDE3 был очень удобный калькулятор, который встраивался в панель. Можно было просто ввести "2+2", нажать Enter и в текст менялся бы на "4". К сожалению, в KDE4 подобного калькулятора не нашлось. Был Qalculate, но у него имелся ряд недостатков, которые затрудняли его использование для меня лично.
+
+Для решения проблемы наличия такого калькулятора я и написал One Line Calculator. Суть та же, что и в KDE3: Вводится выражение, нажимается Enter и оно вычисляется. Из особенностей: вычисление реализовано через QScriptEngine на ECMAScript. И, соответственно, если Вы хоть немного знаете JavaScript, то Вы можете определить в окне настроек свои собственные функции произвольной сложности.
+
+h3. Краткая информация
+
+* Лицензия: GPL
+* Исходный код: "http://github.com/alno/plasma-widget-onelinecalc":http://github.com/alno/plasma-widget-onelinecalc
+* Страница на www.kde-look.org: "http://www.kde-look.org/content/show.php/show.php?content=89524":http://www.kde-look.org/content/show.php/show.php?content=89524
+* Запись в блоге: "http://blog.alno.name/2008/09/one-line-calculator/":http://blog.alno.name/2008/09/one-line-calculator/
+* Бинарные пакеты для Ubuntu доступны в моем PPA: "https://launchpad.net/~alexey-noskov/+archive/kde":https://launchpad.net/~alexey-noskov/+archive/kde

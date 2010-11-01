@@ -1,0 +1,6 @@
+title: One Line Calculator
+description: Widget for KDE4 desktop (Plasma), allowing to evaluate expressions on the desktop or in panel.
+keywords: kde, kde4, plasma, qtscript, qt, qscriptengine, desktop, widget, plasmoid
+images:
+  - onelinecalc/onelinecalc.png
+  - onelinecalc/onelinecalc-config.png
