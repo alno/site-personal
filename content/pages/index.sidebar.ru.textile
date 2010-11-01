@@ -11,17 +11,17 @@ h3. О сайте
 <r:find url="/projects">
   <h3><r:title /></h3>
   <ul>
-  <r:children:each>
-    <li><r:link /></li>
-  </r:children:each>
+    <r:children:each>
+      <li><r:link /></li>
+    </r:children:each>
   </ul>
 </r:find>
 
 <r:find url="/oldprogs">
   <h3><r:title /></h3>
   <ul>
-  <r:children:each>
-    <li><r:link /></li>
-  </r:children:each>
+    <r:children:each>
+      <li><r:link /></li>
+    </r:children:each>
   </ul>
 </r:find>
