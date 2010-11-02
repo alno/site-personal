@@ -15,6 +15,9 @@ class Application < Rayo::Application
     end
 
     c.add_tags ImagesTags
+
+    c.add_domain 'alno.name', /^(www\.)?alno\.name$/
+    c.add_domain 'blog.alno.name', /^(www.)?blog\.alno\.name$/
   end
 
   set :public, File.join( File.dirname(__FILE__), '..', 'public' )
