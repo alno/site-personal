@@ -1,0 +1,136 @@
+<ol>
+
+<li class="widget widget_text">
+  <h2 class="widgettitle">Подписка</h2>
+  <a href="http://feeds2.feedburner.com/alno" rel="alternate" title="Подписаться на RSS" type="application/rss+xml"><img src="/images/rss-big.gif" border="0"/></a>
+</li>
+
+<li class="widget widget_text">
+  <h2 class="widgettitle">Поиск</h2>
+  <r:snippet name="search-google" />
+</li>
+
+<r:if_content part="related">
+  <li class="widget">
+    <h2 class="widgettitle">Схожие записи</h2>
+    <r:content part="related" />
+  </li>
+</r:if_content>
+
+<li class="widget"><h2 class="widgettitle">Последние записи</h2>
+<ul>
+  <r:find url="/">
+    <r:children:each by="published_at" order="desc" limit="10">
+      <r:if cond="url matches /\d{4}\/\d{2}\/.*/">
+        <li><r:link /></li>
+      </r:if>
+    </r:children:each>
+  </r:find>
+</ul>
+</li>
+
+<li class="widget"><h2 class="widgettitle">Самые популярные</h2>
+
+<ul>
+  <li><a href="http://blog.alno.name/2008/09/parsers-in-cpp-with-boost-spirit/">Создание парсеров на C++ с помощью Boost::Spirit</a></li>
+  <li><a href="http://blog.alno.name/2008/10/using-boost-regex/">Регулярные выражения в С++: использование Boost::Regex</a></li>
+  <li><a href="http://blog.alno.name/2008/05/using-boost-smart-pointers/">Умные указатели в C++: boost::shared_ptr, boost::weak_ptr, boost::intrusive_ptr</a></li>
+  <li><a href="http://blog.alno.name/2008/12/advanced-boost-spirit/">Boost::Spirit: Грамматики, функции и замыкания</a></li>
+  <li><a href="http://blog.alno.name/2009/07/rails-testing-tools/">Средства тестирования в Ruby on Rails</a></li>
+  <li><a href="http://blog.alno.name/2009/05/typus/">Typus - админка в Rails-приложениях</a></li>
+  <li><a href="http://blog.alno.name/2008/09/one-line-calculator/">Создание плазмоидов: One-Line Calculator</a></li>
+  <li><a href="http://blog.alno.name/2008/04/using-boost-multi-index/">Использование boost::multi_index</a></li>
+  <li><a href="http://blog.alno.name/2008/07/scanning-java-classpath/">Получение всех Java классов из ClassPath</a></li>
+  <li><a href="http://blog.alno.name/2008/06/kopete-plugin-building-filename/">Сборка плагина для Kopete: имена файлов</a></li>
+</ul>
+
+</li>
+
+<li id="tag_cloud" class="widget widget_tag_cloud"><h2 class="widgettitle">Метки</h2>
+
+<a href='http://blog.alno.name/tags/ai/' class='tag-link-28' title='1 тема' rel="tag" style='font-size: 8pt;'>AI</a>
+<a href='http://blog.alno.name/tags/antispam/' class='tag-link-25' title='3 темы' rel="tag" style='font-size: 11.5pt;'>Antispam</a>
+<a href='http://blog.alno.name/tags/apache/' class='tag-link-36' title='2 темы' rel="tag" style='font-size: 9.75pt;'>Apache</a>
+<a href='http://blog.alno.name/tags/boost/' class='tag-link-7' title='6 тем' rel="tag" style='font-size: 16.75pt;'>Boost</a>
+<a href='http://blog.alno.name/tags/cpp/' class='tag-link-5' title='9 тем' rel="tag" style='font-size: 22pt;'>C++</a>
+<a href='http://blog.alno.name/tags/classpath/' class='tag-link-19' title='1 тема' rel="tag" style='font-size: 8pt;'>Classpath</a>
+<a href='http://blog.alno.name/tags/closures/' class='tag-link-45' title='2 темы' rel="tag" style='font-size: 9.75pt;'>Closures</a>
+<a href='http://blog.alno.name/tags/code/' class='tag-link-30' title='1 тема' rel="tag" style='font-size: 8pt;'>Code</a>
+<a href='http://blog.alno.name/tags/collections/' class='tag-link-46' title='1 тема' rel="tag" style='font-size: 8pt;'>Collections</a>
+
+<a href='http://blog.alno.name/tags/games/' class='tag-link-26' title='1 тема' rel="tag" style='font-size: 8pt;'>Games</a>
+<a href='http://blog.alno.name/tags/grammars/' class='tag-link-43' title='1 тема' rel="tag" style='font-size: 8pt;'>Grammars</a>
+<a href='http://blog.alno.name/tags/groovy/' class='tag-link-14' title='4 темы' rel="tag" style='font-size: 13.25pt;'>Groovy</a>
+<a href='http://blog.alno.name/tags/gui/' class='tag-link-8' title='1 тема' rel="tag" style='font-size: 8pt;'>GUI</a>
+<a href='http://blog.alno.name/tags/haml/' class='tag-link-31' title='1 тема' rel="tag" style='font-size: 8pt;'>Haml</a>
+<a href='http://blog.alno.name/tags/j2me/' class='tag-link-32' title='1 тема' rel="tag" style='font-size: 8pt;'>J2ME</a>
+<a href='http://blog.alno.name/tags/jar/' class='tag-link-20' title='1 тема' rel="tag" style='font-size: 8pt;'>Jar</a>
+<a href='http://blog.alno.name/tags/java/' class='tag-link-4' title='6 тем' rel="tag" style='font-size: 16.75pt;'>Java</a>
+<a href='http://blog.alno.name/tags/jface/' class='tag-link-34' title='1 тема' rel="tag" style='font-size: 8pt;'>JFace</a>
+
+<a href='http://blog.alno.name/tags/kde/' class='tag-link-24' title='4 темы' rel="tag" style='font-size: 13.25pt;'>KDE</a>
+<a href='http://blog.alno.name/tags/kde4/' class='tag-link-40' title='1 тема' rel="tag" style='font-size: 8pt;'>KDE4</a>
+<a href='http://blog.alno.name/tags/kopete/' class='tag-link-23' title='5 тем' rel="tag" style='font-size: 15pt;'>Kopete</a>
+<a href='http://blog.alno.name/tags/linux/' class='tag-link-11' title='4 темы' rel="tag" style='font-size: 13.25pt;'>Linux</a>
+<a href='http://blog.alno.name/tags/maven/' class='tag-link-17' title='1 тема' rel="tag" style='font-size: 8pt;'>Maven</a>
+<a href='http://blog.alno.name/tags/metaprogramming/' class='tag-link-21' title='1 тема' rel="tag" style='font-size: 8pt;'>Metaprogramming</a>
+<a href='http://blog.alno.name/tags/multimethods/' class='tag-link-22' title='1 тема' rel="tag" style='font-size: 8pt;'>Multimethods</a>
+<a href='http://blog.alno.name/tags/parsing/' class='tag-link-42' title='3 темы' rel="tag" style='font-size: 11.5pt;'>Parsing</a>
+<a href='http://blog.alno.name/tags/performance/' class='tag-link-29' title='2 темы' rel="tag" style='font-size: 9.75pt;'>Performance</a>
+
+<a href='http://blog.alno.name/tags/persistence/' class='tag-link-33' title='1 тема' rel="tag" style='font-size: 8pt;'>Persistence</a>
+<a href='http://blog.alno.name/tags/programming/' class='tag-link-44' title='7 тем' rel="tag" style='font-size: 18.5pt;'>Programming</a>
+<a href='http://blog.alno.name/tags/qt/' class='tag-link-39' title='1 тема' rel="tag" style='font-size: 8pt;'>Qt</a>
+<a href='http://blog.alno.name/tags/rails/' class='tag-link-3' title='3 темы' rel="tag" style='font-size: 11.5pt;'>Rails</a>
+<a href='http://blog.alno.name/tags/regexp/' class='tag-link-47' title='2 темы' rel="tag" style='font-size: 9.75pt;'>Regexp</a>
+<a href='http://blog.alno.name/tags/robots/' class='tag-link-27' title='1 тема' rel="tag" style='font-size: 8pt;'>Robots</a>
+<a href='http://blog.alno.name/tags/rss/' class='tag-link-37' title='1 тема' rel="tag" style='font-size: 8pt;'>Rss</a>
+<a href='http://blog.alno.name/tags/ruby/' class='tag-link-12' title='3 темы' rel="tag" style='font-size: 11.5pt;'>Ruby</a>
+<a href='http://blog.alno.name/tags/spirit/' class='tag-link-41' title='2 темы' rel="tag" style='font-size: 9.75pt;'>Spirit</a>
+
+<a href='http://blog.alno.name/tags/swt/' class='tag-link-35' title='1 тема' rel="tag" style='font-size: 8pt;'>SWT</a>
+<a href='http://blog.alno.name/tags/tools/' class='tag-link-16' title='6 тем' rel="tag" style='font-size: 16.75pt;'>Tools</a>
+<a href='http://blog.alno.name/tags/web/' class='tag-link-6' title='3 темы' rel="tag" style='font-size: 11.5pt;'>Web</a></li>
+<li id="linkcat-10" class="widget widget_links"><h2 class="widgettitle">Блоги о C++</h2>
+
+	<ul class='xoxo blogroll'>
+<li><a href="http://alenacpp.blogspot.com/" target="_blank">AlenaC++</a></li>
+<li><a href="http://www.codeblogz.ru/" target="_blank">CodeBlogZ</a></li>
+<li><a href="http://dask-blog.blogspot.com/" target="_blank">DaskNet</a></li>
+
+<li><a href="http://deepencpp.blogspot.com/">DeepenCpp</a></li>
+<li><a href="http://dvinogradov.blogspot.com/" target="_blank">Raider</a></li>
+<li><a href="http://evgeny-lazin.blogspot.com/" target="_blank">Евгений Лазин</a></li>
+
+	</ul>
+</li>
+
+<li id="linkcat-18" class="widget widget_links"><h2 class="widgettitle">Блоги о Java</h2>
+
+	<ul class='xoxo blogroll'>
+<li><a href="http://kobyleha.com/ru" target="_blank">Dmitry Kobyleha</a></li>
+
+<li><a href="http://neuronus-javax.blogspot.com/" target="_blank">Java полезности</a></li>
+<li><a href="http://kpy3.blogspot.com/">Всячина</a></li>
+
+	</ul>
+</li>
+
+<li id="linkcat-13" class="widget widget_links"><h2 class="widgettitle">Блоги о Web</h2>
+
+	<ul class='xoxo blogroll'>
+<li><a href="http://blog.fxposter.org/" target="_blank">FxPoster</a></li>
+<li><a href="http://www.jstoolbox.com" target="_blank">JsToolbox</a></li>
+
+<li><a href="http://www.html-blog.ru/" target="_blank">Тех. Отдел</a></li>
+
+<li><a href="http://rubydev.ru/" target="_blank">RubyDev</a></li>
+
+	</ul>
+</li>
+
+<li id="github-badge" class="widget widget_links"></li>
+
+			</ol>
+
+			<br />
