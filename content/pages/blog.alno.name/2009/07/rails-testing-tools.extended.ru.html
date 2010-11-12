@@ -1,0 +1,152 @@
+<h2>Модульные и функциональные тесты</h2>
+
+<p>Здесь я рассмотрю основные средства, используемые для модульного и функционального тестирования в Rails-приложениях. Напомню, что модульные тесты используются для тестирования логики приложения, которая расположена в моделях, а также для тестирования различных независимых участков приложения, например, хелперов (helpers).</p>
+
+<h3>Test::Unit</h3>
+
+<p>
+<b>Test::Unit</b> является классическим средством тестирования в стиле <a href="http://en.wikipedia.org/wiki/XUnit">xUnit</a>. В Rails-приложениях именно он и используется по умолчанию. Набор тестов с его использованием описывается в виде класса, методы которого представляют различные тесты. В коде методов в необходимых точках добавляются проверки, представленные вызовами <tt>assert_*</tt>.
+</p>
+
+<p>Ниже приведен пример простейшего теста с использованием <b>Test::Unit</b>:</p>
+
+<r:code lang="ruby">require 'test/unit'
+
+class MyTest < Test::Unit::TestCase
+  # def setup
+  # end
+
+  # def teardown
+  # end
+
+  def test_fail
+    assert(2 + 2 == 4, 'Assertion was false.')
+  end
+end
+</r:code>
+
+<p>RDoc-документация для Test::Unit: <a href="http://www.ruby-doc.org/stdlib/libdoc/test/unit/rdoc/classes/Test/Unit.html">http://www.ruby-doc.org/stdlib/libdoc/test/unit/rdoc/classes/Test/Unit.html</a></p>
+
+<h3>RSpec</h3>
+
+<p><b>RSpec</b> - средство, предназначенное для спецификации поведения кода. Я не хочу вдаваться в отличия спецификации от тестирования (и BDD от TDD), просто приведу пример спецификации модели с использованием <b>RSpec</b>:</p>
+
+<r:code lang="ruby">describe "A new account" do
+
+  before do
+    @account = Account.new
+  end
+
+  it "should have a balance of $0" do
+    @account.balance.should eql(Money.new(0, :dollars))
+  end
+
+end
+</r:code>
+
+<p>Как видно из примера, RSpec представляет специальный язык в рамках Ruby для описания спецификаций. Следствием этого является то, что хорошо написанные спецификации легко читаются, практически как текст на английском языке.</p>
+
+<p>Одним из минусов RSpec является то, что для проверки спецификаций требуются создавать специальные Rake-задачи в приложении, в отличии от тестов на основе Test::Unit, задачи для которого включены в Rails.</p>
+
+<p>Сайт проекта: <a href="http://rspec.info">http://rspec.info</a></p>
+<p>RDoc-документация для RSpec: <a href="http://rspec.rubyforge.org/rspec/1.2.8/">http://rspec.rubyforge.org/rspec/1.2.8/</a></p>
+
+<h3>Test/Spec</h3>
+
+<p><b>Test/Spec</b> предназначен для описания спецификаций, аналогичных RSpec на базе Test::Unit, что позволяет использовать те же самые стандартные задачи, что и для Test::Unit, а также совмещать тесты и спецификации.</p>
+
+<r:code lang="ruby">require 'test/spec'
+
+describe "Foo" do
+  it "should bar" do
+    (2 + 3).should.equal 5
+  end
+end
+</r:code>
+
+<p>Сайт проекта Test/Spec и RDoc-документация: <a href="http://test-spec.rubyforge.org/">http://test-spec.rubyforge.org/</a></p>
+
+<h3>Shoulda</h3>
+
+<p>Shoulda  - это средство, которое работает на базе Test::Unit и предоставляет некоторые дополнительные возможности, в частности специальный язык для описания конструкций в тестах и набор макросов для часто используемых проверок:</p>
+
+<r:code lang="ruby">class UserTest < Test::Unit::TestCase
+
+  should_have_many :posts
+
+  should_not_allow_values_for :email, "blah", "b lah"
+  should_allow_values_for :email, "a@b.com", "asdf@asdf.com"
+  should_ensure_length_in_range :email, 1..100
+  should_ensure_value_in_range :age, 1..100
+  should_protect_attributes :password
+
+  context "A User instance" do
+    setup do
+      @user = User.find(:first)
+    end
+
+    should "return its full name" do
+      assert_equal 'John Doe', @user.full_name
+    end
+
+    context "with a profile" do
+      setup do
+        @user.profile = Profile.find(:first)
+      end
+
+      should "return true when sent #has_profile?" do
+        assert @user.has_profile?
+      end
+    end
+  end
+end
+</r:code>
+
+<p><b>Update:</b> В настоящий момент Shoulda может быть использована и вместе с RSpec</p>
+
+<p>Сайт проекта: <a href="http://www.thoughtbot.com/projects/shoulda/">http://www.thoughtbot.com/projects/shoulda/</a></p>
+
+<h3>Remarkable</h3>
+
+<p>Shoulda показала удобство использования макросов для распространенных задач в тестировании, однако она работала только над Test::Unit. <b>Remarkable</b> - это реализация набора макросов, аналогичных Shoulda для <b>RSpec</b>. Его использование позволяет описывать следующие спецификации:</p>
+
+<r:code lang="ruby">describe Post do
+  it { should belong_to(:user) }
+  it { should have_many(:comments) }
+  it { should have_and_belong_to_many(:tags) }
+
+  it { should validate_presence_of(:body) }
+  it { should validate_presence_of(:title) }
+  it { should validate_uniqueness_of(:title, :allow_blank => true) }
+end
+</r:code>
+
+<p>Сайт проекта Remarkable и RDoc-документация: <a href="http://remarkable.rubyforge.org/">http://remarkable.rubyforge.org/</a></p>
+<p>Блог проекта: <a href="http://www.nomedojogo.com/category/remarkable/">http://www.nomedojogo.com/category/remarkable/</a></p>
+<p>Исходный код Remarkable: <a href="http://github.com/carlosbrando/remarkable/tree/master">http://github.com/carlosbrando/remarkable/tree/master</a></p>
+
+<h2>Интеграционные тесты - Cucumber</h2>
+
+<p>Cucumber, используемый для интеграционного тестирования приложений продолжает движение в сторону читабельности тестов - тестовые сценарии описываются буквально на естественном языке:</p>
+
+<r:code>  Scenario: Add two numbers
+    Given I have entered 13 into the calculator
+    And I have entered 22 into the calculator
+    When I press "+"
+    Then the result should be 35 on the screen
+</r:code>
+
+<p>И не только на английском:</p>
+
+<r:code>  Сценарий: Сложение двух целых чисел
+    Допустим я ввожу число 50
+    И затем ввожу число 70
+    Если я нажимаю "+"
+    То результатом должно быть число 120
+</r:code>
+
+<p>Написание сценариев в таком виде делает Cucumber просто незаменимым инструментом для тестирования Rails-приложений. Разумеется, некоторое количество кода писать все-таки приходится, для того чтобы описать что означают те или иные приложения.</p>
+
+<h2>Заключение</h2>
+
+<p>Здесь я описал некоторые средства, используемые для тестирования Rails-приложений. Я сознательно не затрагивал здесь различные библиотеки для создания mock-объектов или замены fixtures, возможно, в дальнейшем им можно посвятить отдельную заметку.</p>

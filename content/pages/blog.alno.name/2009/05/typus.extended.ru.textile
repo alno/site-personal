@@ -1,0 +1,87 @@
+Из его особенностей:
+* Позволяет практически мгновенно создать простейшую админку для моделей (создание, удаление, редактирование).
+* Автоматически поддерживаются связи между моделями.
+* Админка является расширяемой.
+* Не генерирует огромного объема кода, который потом никогда не расширяется. Только то, что необходимо - конфиграционный файл и классы констроллеров для расширения. Только классы, без кода системы администрирования в них!
+* Поддерживается локализация админки (пнглийский, испанский, португальский и *русский*).
+* Поддерживается экспорт данных в различные форматы.
+
+h2. Установка
+
+Typus может быть установлен двумя способами:
+
+# Как обычный плагин Rails, для этого в директории приложения необходимо вызвать:
+  <notextile><r:code lang="bash">$ script/plugin install git://github.com/fesplugas/typus.git</r:code></notextile>
+# Через Ruby Gems, для этого в <tt>config/environment.rb</tt> необходимо добавить строку:
+  <notextile><r:code lang="ruby">config.gem 'typus'</r:code></notextile>
+
+После установки необходимо в директории приложения вызвать команды:
+<notextile><r:code lang="bash">$ script/generate typus
+$ rake db:migrate
+</r:code></notextile>
+
+В результате будут сгенерированы файлы конфигурации админки, контроллеры админки для всех существующих моделей и пара миграций, обеспечивающих работу системы пользователей Typus.
+
+Также, для работы админки необходимо убедиться, что в конце файла <tt>config/routes.rb</tt> присутствуют строки:
+<notextile><r:code lang="ruby">map.connect ':controller.:format'
+map.connect ':controller/:action/:id.:format'
+</r:code></notextile>
+
+h2. Конфигурация
+
+После установки плагина создается несколько файлов, хранящих конфигурацию:
+# <tt>config/initalizers/typus.rb</tt> - здесь хранятся общие настройки админки
+# <tt>config/typus/*.yml</tt> - здесь хранятся настройки для различных моделей
+# <tt>config/typus/*_roles.yml</tt> - здесь хранятся права доступа к моделям
+
+В первом файле задаются имя приложения, используемая локаль и т.п. Вот часть опций из него:
+<notextile><r:code lang="ruby">Typus::Configuration.options[:app_name]
+Typus::Configuration.options[:config_folder]
+Typus::Configuration.options[:email]
+Typus::Configuration.options[:locales]
+Typus::Configuration.options[:recover_password]
+Typus::Configuration.options[:root]
+Typus::Configuration.options[:ssl]
+Typus::Configuration.options[:templates_folder]
+Typus::Configuration.options[:user_class_name]
+Typus::Configuration.options[:user_fk]
+</r:code></notextile>
+
+Например, чтобы задать русскую локаль необходимо в соответствующей опции этого файла выставить:
+<notextile><r:code lang="ruby">Typus::Configuration.options[:locales] = [ [ "Русский", :ru ] ]</r:code></notextile>
+
+В файлах настроек для моделей хранится описание того, как модели должны отображаться в админке, в частности:
+* Какие поля должны отображаться при каждом из действий;
+* Какие связи должны редактироваться;
+* По каким полям должна осуществляться фильтрация и поиск;
+* В каком порядке должны выводится записи;
+* И тому подобное...
+
+h2. Модификация админки
+
+Сгенерированная админка может быть легко модифицирована одним из следующих способов:
+* (банальный) Добавление новых контроллеров в админку;
+* Добавление новых действий к существующим контроллерам. Действие описывается в сгенерированном контроллере, а его указание в конфигурационном файле админки позволяет привязать действие к интерфейсу администрирования;
+* Переопределение видов;
+* Добавление блоков в виды. В последнем случае нет необходимости переопределять весь интерфейс, достаточно толко создать партиалы, которые будут встроены в соответствующие участки интерфейса. Список возможных партиалов приведен ниже (где RESOURCE - имя редактируемой модели):
+<notextile><r:code lang="bash">views/admin/login/_{bottom|top}.html.erb
+views/admin/dashboard/_{bottom|sidebar|top}.html.erb
+views/admin/RESOURCE/_edit.html.erb
+views/admin/RESOURCE/_edit_{bottom|sidebar|top}.html.erb
+views/admin/RESOURCE/_index.html.erb
+views/admin/RESOURCE/_index_{bottom|sidebar|top}.html.erb
+views/admin/RESOURCE/_new.html.erb
+views/admin/RESOURCE/_new_{bottom|sidebar|top}.html.erb
+views/admin/RESOURCE/_show.html.erb
+views/admin/RESOURCE/_show_{bottom|sidebar|top}.html.erb
+</r:code></notextile>
+
+h2. Пример приложения
+
+На сайте проекта выложен специальный шаблон, позволяющий сгенерировать простое демонстрационное приложение. С его помощью, чтобы попробовать Typus достаточно выполнить в консоли:
+
+<notextile><r:code lang="bash">$ rails example.com -m http://intraducibles.com/projects/typus/demo.txt
+$ cd example.com && script/server
+</r:code></notextile>
+
+После этого можно заходить в админку по адресу <tt>http://127.0.0.1:3000/admin</tt>.

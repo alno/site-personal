@@ -1,0 +1,2 @@
+* "Сайт проекта (En)":http://jgroups.org/
+* "Руководство пользователя (En)":http://jgroups.org/ug.html

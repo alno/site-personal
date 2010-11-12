@@ -1,0 +1,4 @@
+* "Тестирование в Rails (En)":http://guides.rubyonrails.org/testing.html
+* "Введение в Shoulda (En)":http://giantrobots.thoughtbot.com/2007/4/6/shoulda-coulda-woulda
+* "Экстремальное программирование, знакомство с Behavior Driven Development и RSpec (Ru)":http://habrahabr.ru/blogs/testing/52929/
+* "BDD с помощью Cucumber (Ru)":http://habrahabr.ru/blogs/ruby/62958/

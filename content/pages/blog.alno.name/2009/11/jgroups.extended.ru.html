@@ -1,0 +1,145 @@
+<h2>Начало работы</h2>
+
+<p>Итак, для начала надо скачать JGroups. Сделать это можно здесь: <a href="http://sourceforge.net/projects/javagroups/files/">http://sourceforge.net/projects/javagroups/files/</a>. При написании этой статьи я использовал версию <b>2.6.13.GA</b>. Также, для работы требуется Apache Commons Logging, или что-то его заменяющее (например, jcl-over-slf4j). Скачать можно здесь: <a href="http://commons.apache.org/downloads/download_logging.cgi">http://commons.apache.org/downloads/download_logging.cgi</a>.</p>
+
+<p>Если же Вы используете Maven, то можно добавить репозиторий JBoss:
+
+<r:code lang="xml">
+  <repository>
+    <id>jboss</id>
+    <name>jboss</name>
+    <url>http://repository.jboss.com/maven2</url>
+    <snapshots>
+      <enabled>false</enabled>
+    </snapshots>
+  </repository>
+</r:code>
+
+и добавить в зависимости:
+
+<r:code lang="xml">
+  <dependency>
+    <groupId>jgroups</groupId>
+    <artifactId>jgroups</artifactId>
+    <version>2.6.13.GA</version>
+  </dependency>
+
+  <dependency>
+    <groupId>commons-logging</groupId>
+    <artifactId>commons-logging</artifactId>
+    <version>1.1.1</version>
+  </dependency>
+</r:code>
+</p>
+
+<p>
+Возможно, необходимо настроить сетевой интерфейс для работы с мультикастом. В Linux, для этого необходимо добавить соответствующий роут:
+
+<r:code lang="bash">route add -net 224.0.0.0 netmask 240.0.0.0 dev lo</r:code>
+</p>
+
+<h2>Иницализация</h2>
+
+<p>
+Для того,чтобы создать канал необходимо создать объект класса <tt><a href="http://jgroups.org/javadoc/org/jgroups/JChannel.html">JChannel</a></tt>, передав ему в конструктор параметры конфигурации. В примере в конфигурации я указываю адрес, который должен использоваться для канала. Полный список опций можно посмотреть <a href="http://www.jgroups.org/manual/html/protlist.html">в документации</a>.
+
+<r:code lang="java">JChannel channel = new JChannel( "UDP(bind_addr=127.0.0.1)" );</r:code>
+
+Теперь можно подключаться к кластеру вызовом <tt>JChannel#connect()</tt>. В качестве параметра в него передается имя группы, можете выбрать любое, которое Вам нравится.
+
+<r:code lang="java">channel.connect( "MyCluster" );</r:code>
+</p>
+
+<h2>Отправка сообщений</h2>
+
+<p>
+Сообщения в JGroups представлены классом <tt><a href="http://jgroups.org/javadoc/org/jgroups/Message.html">Message</a></tt>, который содержит адрес отправителя, адрес получателя и данные. Адреса представлены объектами класса <tt><a href="http://jgroups.org/javadoc/org/jgroups/Address.html">Address</a></tt>, а данные - это любые сериализуемые объекты или просто массив байт. Например, чтобы создать сообщение для всей группой, содержащее строку можно написать:
+
+<r:code lang="java">new Message( null, null, "Some content" )</r:code>
+
+Здесь первый параметр - получатель, затем - отправитель, а затем - содержимое.
+</p>
+
+<p>
+Чтобы отправить сообщение необходимо вызвать метод <b>JChannel#send</b> и передать ему сообщение в качестве параметра. Например:
+
+<r:code lang="java">channel.send( new Message( null, null, "Some content" ) )</r:code>
+</p>
+
+<h2>Обработка сообщений</h2>
+
+<p>Теперь необходимо написать код, для обработки сообщений, приходящих приложению. Для этого необходимо вызвать метод <tt>JChannel#setReceiver</tt>, передав в качестве параметра объект, реализующий интерфейс <tt><a href="http://jgroups.org/javadoc/org/jgroups/Receiver.html">Receiver</a></tt>. Например, чтобы просто выводить все полученные сообщения на печать достаточно написать следующий код:
+
+<r:code lang="java">
+channel.setReceiver( new ReceiverAdapter(){
+
+	@Override
+	public void receive( Message m ) {
+		System.out.println( m.getObject() );
+	}
+
+} );
+</r:code>
+
+Здесь, чтобы уменьшить объем кода, объект наследуется от класса <tt>ReceiverAdapter</tt>, который предоставляет пустые реализации различных методов интерфейса <tt>Receiver</tt>. Как видно из примера, для обработки сообщения используется метод <tt>receive</tt>, в который сообщение передается в качестве параметра.
+</p>
+
+<h2>Простейший чат</h2>
+
+<p>Теперь можно собрать простейший чат. Он будет рассылать группе строки, принятые с консоли и печатать полученные строки на консоль. Пример код:</p>
+
+<r:code lang="java">
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import org.jgroups.JChannel;
+import org.jgroups.Message;
+import org.jgroups.ReceiverAdapter;
+
+public class SimplestChat {
+
+	public static void main( String[] args ) throws Exception {
+		JChannel channel = new JChannel( "UDP(bind_addr=127.0.0.1)" );
+		channel.setReceiver( new ReceiverAdapter() {
+
+			@Override
+			public void receive( Message m ) {
+				System.out.println( m.getObject() );
+			}
+
+		} );
+		channel.connect( "MyCluster" ); // Подключаемся к группе
+
+		/**
+		 * Цикл обработки команд с консоли
+		 */
+		BufferedReader in = new BufferedReader( new InputStreamReader( System.in ) );
+		while ( true ) {
+
+			String line = in.readLine();
+
+			if ( line.equalsIgnoreCase( "quit" ) || line.equalsIgnoreCase( "exit" ) ) {
+				break;
+			}
+
+			channel.send( new Message( null, null, line ) );
+		}
+
+		channel.close(); // Отключаемся от группы по завершению работы
+	}
+
+}
+</r:code>
+
+<p>При запуске этот код должен выводить что-нибудь вроде:</p>
+
+<pre>
+  Nov 8, 2009 4:18:27 PM org.jgroups.JChannel init
+  INFO: JGroups version: 2.6.13.GA
+</pre>
+
+<h2>Что дальше?</h2>
+
+<p>
+Здесь я рассмотрел только создание канала и отправку сообщений группе. В стороне остались достаточно много моментов: адресация, сообщения конкретному процессу и, главное, управление группой. Желающие ознакомиться с ними могут заглянуть в документацию JGroups: <a href="http://jgroups.org/ug.html">http://jgroups.org/ug.html</a>.
+</p>

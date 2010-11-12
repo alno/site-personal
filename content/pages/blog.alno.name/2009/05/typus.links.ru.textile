@@ -1,0 +1,2 @@
+* "Официальная страница проекта":http://intraducibles.com/projects/typus
+* "Репозиторий на GitHub":http://github.com/fesplugas/typus

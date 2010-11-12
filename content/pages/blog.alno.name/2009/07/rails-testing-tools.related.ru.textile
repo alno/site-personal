@@ -1,0 +1,4 @@
+* "Периодические задачи в Ruby on Rails":http://blog.alno.name/2008/05/periodic-tasks-in-ruby-on-rails/
+* "Ошибки при использовании Rails и FastCGI":http://blog.alno.name/2008/04/errors-using-rails-with-fastcgi/
+* "Разработка расширений для Radiant":http://blog.alno.name/2009/03/radiant-extensions-development/
+* "Irwi - Wiki в Rails-приложениях":http://blog.alno.name/2009/08/irwi-plugin/

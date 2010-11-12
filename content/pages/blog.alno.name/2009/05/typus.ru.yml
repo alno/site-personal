@@ -1,0 +1,8 @@
+title: "Typus - админка в Rails-приложениях"
+description: "Статья посвящена автоматической генерации админки для Rails-приложений с использованием плагина Typus"
+keywords: "typus, rails, admin, админка, генерация, ror, автоматическая админка, scaffold"
+layout: blog_entry
+published_at: 2009-05-26T23:35:25+00:00
+images:
+  - typus/typus1.png
+  - typus/typus2.png

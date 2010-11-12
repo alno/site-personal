@@ -1,0 +1,5 @@
+* "Средства тестирования в Ruby on Rails":http://blog.alno.name/2009/07/rails-testing-tools/
+* "Периодические задачи в Ruby on Rails":http://blog.alno.name/2008/05/periodic-tasks-in-ruby-on-rails/
+* "Ошибки при использовании Rails и FastCGI":http://blog.alno.name/2008/04/errors-using-rails-with-fastcgi/
+* "Разработка расширений для Radiant":http://blog.alno.name/2009/03/radiant-extensions-development/
+* "Typus - админка в Rails-приложениях":http://blog.alno.name/2009/05/typus/

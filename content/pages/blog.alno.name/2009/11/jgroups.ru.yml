@@ -1,0 +1,5 @@
+title: "Организация взаимодействия Java-приложений с помощью JGroups"
+description: "Статья об использовании библиотеки JGroups для кластеризации Java-приложений. Clustering Java aaplications with JavaGroups library."
+keywords: "jgroups, java, clustering, кластеризация, network, grid, messaging, channel, ditributed java, java clustering"
+layout: blog_entry
+published_at: 2009-11-08T19:31:18+00:00

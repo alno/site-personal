@@ -1,0 +1,226 @@
+<h2>Требования</h2>
+
+<p>Я использую Ubuntu 9.10 Karmic, в нем для работы необходимо наличие следующих пакетов:</p>
+<ul>
+<li><b>kdelibs5-dev</b> - библиотеки KDE</li>
+<li><b>kdepimlibs5-dev</b> - библиотеки PIM KDE</li>
+<li><b>libboost-dev</b> - Boost</li>
+</ul>
+
+<p>Соответственно:</p>
+<r:code lang="bash">
+sudo aptitude install kdelibs5-dev kdepimlibs5-dev libboost-dev
+</r:code>
+
+<h2>Каркас приложения</h2>
+
+<p>Итак, приступим к созданию такого приложения. Назовем его, например, addtodo. Для начала в директории будущего приложения создадим файлы для исходников:</p>
+
+<p><b>CMakeLists.txt</b>, файл для конфигурации и сборки:</p>
+<r:code lang="bash">
+PROJECT(add-todo)
+
+find_package(KDE4 REQUIRED) # Находим модули KDE4
+find_package(KdepimLibs REQUIRED) # Находим модули KDE PIM
+
+include(KDE4Defaults)
+
+add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDEPIMLIBS_INCLUDE_DIR} ${KDE4_INCLUDES})
+
+set(CMAKE_CXX_FLAGS "-fexceptions")
+
+kde4_add_executable(add-todo add_todo.cpp) # Добавляем цель
+
+target_link_libraries(add-todo ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_AKONADI_LIBS} ${KDEPIMLIBS_KCAL_LIBS}) # Добавляем соответствующие библиотеки
+</r:code>
+
+<p><b>add_todo_app.h</b>, заголовочный файл:</p>
+<r:code lang="cpp">
+#ifndef ADD_TODO_H
+#define ADD_TODO_H
+
+#include <QCoreApplication>
+
+#include <KJob>
+
+class AddTodo : public QCoreApplication {
+    Q_OBJECT
+public:
+    AddTodo( int argc, char ** argv );
+public slots:
+    void collectionsFetched( KJob * job ); // Будет вызван, когда мы получим список коллекций
+    void todoCreated( KJob * job ); // Будет вызван, когда мы создадим задачу
+};
+
+#endif // ADD_TODO_H
+</r:code>
+
+<p><b>add_todo_app.cpp</b>, здесь будет содержаться основной код:</p>
+<r:code lang="cpp">
+#include "add_todo.h"
+
+#include <QTextStream>
+
+static QTextStream out( stdout ); // Поток для вывода данных
+
+AddTodo::AddTodo( int argc, char ** argv ) : QCoreApplication( argc, argv ) {
+    out << "Application started" << endl;
+}
+
+void AddTodo::collectionsFetched( KJob * job ) {
+}
+
+void AddTodo::todoCreated( KJob * job ) {
+}
+
+int main( int argc, char ** argv ) {
+    AddTodo app( argc, argv ); // Создаем экземпляр приложения
+
+    return app.exec(); // И входим в цикл обработки сигналов
+}
+</r:code>
+
+<p>Теперь можно проверить, что наше пока еще ничего не делающее приложение корректно собирается:</p>
+<r:code lang="bash">
+mkdir build
+cd build
+cmake ..
+make
+</r:code>
+
+<p>Если мы запустим приложение, то оно напишет "Application started" и уйдет в бесконечный цикл ожидания сигналов. Пускай, теперь будем добавлять полезную работу.</p>
+
+<h2>Получения списка коллекций через Akonadi</h2>
+
+<p>Для того, чтобы создать задачу через Akonadi, необходимо сначала получить ссылку на <b>коллекцию</b> (<a rel="nofollow" href="http://api.kde.org/4.x-api/kdepimlibs-apidocs/akonadi/html/classAkonadi_1_1Collection.html">Akonadi::Collection</a>), в которой мы будем ее создавать. Для этого мы получим все коллекции и выберем ту, которая поддерживает подходящий тип элементов. Получение коллекции в Akonadi осуществляется путем создания задачи <a rel="nofollow" href="http://api.kde.org/4.x-api/kdepimlibs-apidocs/akonadi/html/classAkonadi_1_1CollectionFetchJob.html">Akonadi::CollectionFetchJob</a>.</p>
+
+<p>В начало add_todo.cpp добавим инклуды, импорт пространства имен Akonadi и объявим одну константу, в которой будет записан MIME-тип для задачи. Он необходим нам для того, чтобы выбрать подходящую задачу.</p>
+<r:code lang="cpp">
+#include <QStringList>
+
+#include <Akonadi/Collection>
+#include <Akonadi/CollectionFetchJob>
+
+using namespace Akonadi;
+
+static QString todoMimeType( "text/calendar" ); // MIME-тип задачи
+</r:code>
+
+<p>В конструктор приложения добавляем:</p>
+<r:code lang="cpp">
+    CollectionFetchJob *job = new CollectionFetchJob( Collection::root(), CollectionFetchJob::FirstLevel, this ); // Создаем задачу
+
+    connect( job, SIGNAL(result(KJob*)), this, SLOT(collectionsFetched(KJob*)) ); // Связываем сигнал и слот
+</r:code>
+
+<p>В первой строке аргументы означают то, что мы получаем подколлекции корневой коллекции, причем только первого уровня.</p>
+
+<p>В метод <b>collectionsFetched</b> добавляем код обработки и выбора нужной нам коллекции:</p>
+<r:code lang="cpp">
+    out << "Collections fetched" << endl;
+
+    if ( job->error() ) {
+        out << "Error occurred: " << job->errorText() << endl;
+        exit( -1 );
+        return;
+    }
+
+    const CollectionFetchJob * fetchJob = qobject_cast<CollectionFetchJob*>( job ); // Приводим задачу к нужному типу
+
+    const Collection * selectedCollection = 0; // Переменная для выбранной коллекции
+
+    foreach( const Collection & collection, fetchJob->collections() ) {
+        out << "Name: " << collection.name(); // Печатаем имя коллекции для отладки
+
+        if ( collection.contentMimeTypes().contains( todoMimeType ) ) { // Проверяем, принимает ли коллекция нужный тип данных
+            selectedCollection = &collection;
+            break;
+        }
+    }
+
+    if ( !selectedCollection ) { // Если не нашли подходящей коллекции, то печатаем ошибку и выходим
+        out << "Error occurred: no valid collection found"<< endl;
+        exit( -1 );
+        return;
+    }
+
+    // А здесь будем создавать задачу
+</r:code>
+
+<h2>Создание задачи</h2>
+
+<p>Теперь у нас есть коллекция, в которую можно наконец добавить задачу. Для этого, необходимо сделать три вещи:</p>
+
+<ul>
+<li>Создать объект <a rel="nofollow" href="http://api.kde.org/4.x-api/kdepimlibs-apidocs/kcal/html/classKCal_1_1Todo.html">KCal::Todo</a>, описывающий нашу задачу</li>
+<li>Создать объект <a rel="nofollow" href="http://api.kde.org/4.x-api/kdepimlibs-apidocs/akonadi/html/classAkonadi_1_1Item.html">Akonadi::Item</a>, представляющий элемент данных в Akonadi</li>
+<li>Создать задачу создания нового элемента</li>
+<li>Обработать ее результат</li>
+</ul>
+
+<p>Итак, приступим. Сначала подключим заголовочные файлы:</p>
+<r:code lang="cpp">
+#include <Akonadi/Item>
+#include <Akonadi/ItemCreateJob>
+
+#include <kcal/todo.h>
+
+#include <boost/shared_ptr.hpp>
+</r:code>
+
+<p>Теперь напишем код для первых трех пунктов в конце метода <b>collectionsFetched</b>:</p>
+<r:code lang="cpp">
+    KDateTime dueDate = KDateTime::fromString( arguments()[2], "%d.%m.%Y" ); // Парсим дату
+
+    if ( !dueDate.isValid() ) { // Проверяем, что дата распарсилась
+        out << "Error occured: invalid date '" << arguments()[2] << "'" << endl;
+        exit( -2 );
+    }
+
+    KCal::Todo::Ptr todo( new KCal::Todo() );
+    todo->setSummary( arguments()[1] ); // Текст
+    todo->setDtDue( dueDate ); // Дата
+    todo->setPercentComplete( 0 ); // Пока не выполнена
+    todo->setHasStartDate( false ); // Начальная дата не установлена
+    todo->setHasDueDate( true ); // Установлена дата выполнения
+
+    Item item( todoMimeType );
+    item.setPayload<KCal::Todo::Ptr>( todo );
+
+    ItemCreateJob * itemCreateJob = new ItemCreateJob( item, *selectedCollection, this ); // Создаем задачу
+
+    connect( itemCreateJob, SIGNAL(result(KJob*)), this, SLOT(todoCreated(KJob*)) ); // Связываем сигнал и слот
+</r:code>
+
+<p>А в метод <b>todoCreated</b> добавим проверку:</p>
+<r:code lang="cpp">
+    if ( job->error() ) {
+        out << "Error occurred: " << job->errorText() << endl;
+        exit( -1 );
+        return;
+    }
+
+    out << "TODO created" << endl;
+    quit();
+</r:code>
+
+<p>Также, неплохо добавить в начало <b>main</b> проверку количества аргументов:</p>
+<r:code lang="cpp">
+    if ( argc < 3 ) { // Проверяем количество аргументов
+        out << "Usage: add-todo [text] [date]" << endl;
+        return -2;
+    }
+</r:code>
+
+<p>Все, теперь программа завершена, можно скомпилировать ее и запустить следующим образом:</p>
+
+<r:code lang="bash">
+./add-todo "Something" 21.01.2010
+</r:code>
+
+<p>После выполнения у вас в календаре должна появиться новая задача. Теперь можно что-то улучшать, например, добавить возможность распознавания ссылок на даты вида "today", "tomorrow", поддержку времени, категорий и много чего интересного...</p>
+
+<p>Полный код <a href="http://gist.github.com/282046">можно посмотреть по ссылке</a>. </p>
+
+<p>Код примеров построен на основе плагина для Plasma Runner, который можно найти <a href="http://www.kde-apps.org/content/show.php?action=content&content=118854">здесь</a> и <a href="http://github.com/alno/plasma-runner-events">здесь</a>.</p>
