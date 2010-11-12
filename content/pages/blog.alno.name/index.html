@@ -1,3 +1,5 @@
-<r:children:each by="published_at" order="desc" limit="10">
-   <r:snippet name="entry" />
-</r:children:each>
+<r:related rel="entries">
+	<r:each limit="10">
+   <r:snippet name="entry-blog" />
+   </r:each>
+</r:related>

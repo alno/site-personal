@@ -1,3 +1,6 @@
 title: Главная страница
 tt: <%= path %>
 layout: html_page
+relations:
+  entries:
+    - 2010/01/creating-tasks-with-akonadi
