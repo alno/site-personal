@@ -131,7 +131,7 @@ xml syntax:           0.660000   0.060000   0.720000 (  0.854120)
 
 And graph:</p>
 
-<p style="texta-align:center;"><r:assets:image id="14" size="original" /></p>
+<p style="texta-align:center;"><img src="/images/ruby-code-highlighters/rch-performance.png" /></p>
 
 <p>
 You can see, what CodeRay is fastest, and UltraViolet is slowest. However, i think that poor performance of UltraViolet is repaired by huge amount of supported languages and themes.
