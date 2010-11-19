@@ -1,0 +1,33 @@
+<title><r:find url="/"><r:title /></r:find></title>
+<link>http://blog.alno.name</link>
+<description>Заметки о разрaботке на C++, Java и Rails</description>
+
+<pubDate><r:find url="/"><r:children level="3"><r:last by="published_at" order="asc"><r:rfc1123_date /></r:last></r:children></r:find></pubDate>
+<generator>http://github.com/alno/rayo</generator>
+<language>ru</language>
+
+<atom:link href="http://blog.alno.name<r:url />" rel="self" type="application/rss+xml" />
+
+<r:find url="/"><r:children level="3"><r:each by="published_at" order="desc" limit="10">
+<item><r:with format="html">
+	<title><r:title /></title>
+	<link>http://blog.alno.name<r:url /></link>
+	<comments>http://blog.alno.name<r:url />#comments</comments>
+	<pubDate><r:rfc1123_date /></pubDate>
+	<dc:creator>Alno</dc:creator>
+	<guid isPermaLink="true">http://blog.alno.name<r:url /></guid>
+	<description><![CDATA[<r:content />]]></description>
+	<content:encoded><![CDATA[
+		<r:content /><r:content part="extended" />
+
+		<r:if_content part="related"><div id="related">
+			<h2>Записи на схожие темы</h2>
+			<r:content part="related" />
+		</div></r:if_content>
+
+		<r:if_content part="links"><div id="links">
+			<h2>Ссылки</h2>
+			<r:content part="links" />
+		</div></r:if_content>
+	]]></content:encoded>
+</r:with></item></r:each></r:children></r:find>

@@ -1,0 +1,12 @@
+<!-- Blog posts -->
+<r:find url="/">
+	<r:children level="3">
+		<r:each by="published_at" order="desc" limit="100">
+			<url>
+				<loc>http://blog.alno.name<r:url /></loc>
+				<changefreq>weekly</changefreq>
+				<priority>0.5</priority>
+			</url>
+		</r:each>
+	</r:children>
+</r:find>
