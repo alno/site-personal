@@ -1,0 +1,8 @@
+В связи с переводом моего блога на Radiant у меня возник вопрос с подсветкой кода, который у меня встречается достаточно часто. Сейчас я использую для этого highlight.js, однако рассматриваю возможность использования серверных решений.
+ 
+Так что, сегодня я расскажу о трех различных Ruby-библиотеках, используемых для подсветки синтаксиса:
+* "Syntax":http://blog.alno.name/2009/02/code-highlighters-ruby/#syntax
+* "UltraViolet":http://blog.alno.name/2009/02/code-highlighters-ruby/#ultraviolet
+* "CodeRay":http://blog.alno.name/2009/02/code-highlighters-ruby/#coderay
+
+Также, я провел замеры производительности, так что в конце вы можете найти <a href="http://blog.alno.name/2009/02/code-highlighters-ruby/#performance">сравнение библиотек по производительности</a>.

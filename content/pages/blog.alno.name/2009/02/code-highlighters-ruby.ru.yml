@@ -1,0 +1,7 @@
+title: "Библиотеки подсветки кода для Ruby"
+description: "Ruby-библиотеки для синтаксической подсветки кода: UltraViolet, CodeRay и Syntax"
+keywords: "ruby, rails, radiant, code highlighters, ultraviolet, syntax, coderay, theme"
+layout: blog_entry
+published_at: 2009-02-18T22:35:50+00:00
+images:
+  - ruby-code-highlighters/rch-performance.png

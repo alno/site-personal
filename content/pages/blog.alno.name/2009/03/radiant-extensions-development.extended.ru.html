@@ -1,0 +1,109 @@
+<h2>Создание скелета расширения</h2>
+
+<p>Для того, чтобы создать скелет расширения необходимо вызвать скрипт <tt>script/generate extension</tt> в директории приложения. Например, для создания расширения с именем <tt>code</tt>:
+
+<r:code lang="bash">script/generate extension code</r:code>
+
+В результате, в директории <tt>vendor/extensions/code</tt> будут созданы файлы расширения, основным из которых является <tt>code_extension.rb</tt>. Его содержимое:
+
+<r:code lang="ruby">
+# Uncomment this if you reference any of your controllers in activate
+# require_dependency 'application'
+
+class CodeExtension < Radiant::Extension
+  version "1.0"
+  description "Describe your extension here"
+  url "http://yourwebsite.com/code"
+  
+  # define_routes do |map|
+  #   map.namespace :admin, :member => { :remove => :get } do |admin|
+  #     admin.resources :code
+  #   end
+  # end
+  
+  def activate
+    # admin.tabs.add "Code", "/admin/code", :after => "Layouts", :visibility => [:all]
+  end
+  
+  def deactivate
+    # admin.tabs.remove "Code"
+  end
+  
+end
+</r:code>
+
+По сути, сейчас мы уже имеем расширение, которое, правда, ничего не делает. Это необходимо исправить.
+</p>
+
+<h2>Простейшее расширение</h2>
+
+<p>
+В расширение мы добавим один тэг <tt>&lt;r:code&gt;</tt>, который позволяет подсветить код с использованием <a href="http://blog.alno.name/2009/02/ruby-code-highlighters#coderay">библиотеки CodeRay</a>. Для этого необходимо создать новый модуль, содержащий тэг. Например, <tt>code_tags.rb</tt> в директории <tt>lib</tt> расширения. Чтобы в модуле можно было объявлять тэги, в него необходимо включить <tt>Radiant::Taggable</tt>:
+
+<r:code lang="ruby">
+module CodeTags
+  include Radiant::Taggable
+end
+</r:code>
+
+Теперь в модуль необходимо добавить тэг. Делается это следующим образом:
+
+<r:code lang="ruby">
+module CodeTags
+  include Radiant::Taggable
+
+  desc %{
+    Some tag description here...
+  }
+  tag 'code' do |tag|
+    tag.expand
+  end
+
+end
+</r:code>
+
+Метод <tt>desc</tt> используется для задания описания для тэга (оно будет отображаться в списке тэгов при редактировании страницы). Метод <tt>tag</tt> объявляет тэг.
+</p>
+
+<p>
+Теперь, чтобы подкчлють модуль с тэгами в файле <tt>code_extension.rb</tt> в метод activate необходимо добавить подключение нашего модуля к классу <tt>Page</tt>:
+<r:code lang="ruby">Page.send :include, CodeTags</r:code>
+</p>
+
+<p>
+Таким образом, мы создали тэг <tt>r:code</tt>, который ничего не делает. Точнее, он просто выводит свое содержимое: <tt>tag.extend</tt> возвращает содержимое тэга. Теперь вспомним, как использовался <a href="http://blog.alno.name/2009/02/ruby-code-highlighters#coderay">CodeRay для подсветки кода</a>:
+
+<r:code lang="ruby">CodeRay.scan( text, lang ).div( :line_numbers => :table, :css => :style, :style => :cycnus )</r:code>
+
+В тэге <tt>code</tt> вместо tag.expand вставим аналогичный код. Исходный код будет выглядеть следующим образом:
+<r:code lang="ruby">
+  tag 'code' do |tag|
+    CodeRay.scan( tag.expand, 'ruby' ).div( :line_numbers => :table, :css => :style, :style => :cycnus )
+  end
+</r:code>
+
+А в начало файла <tt>code_tags.rb</tt> необходимо добавить строку для загрузки <b>CodeRay</b>:
+
+<r:code lang="ruby">require 'coderay'</r:code>
+
+Теперь, в страницах можно использовать конструкции вида &lt;r:code&gt;...&lt;/r:code&gt;. Однако, хотелось бы иметь возможность указывать конкретный язык в аттрибутах тэга. Для доступа к аттрибутам из кода обработчика используется хэш <tt>tag.attr</tt>:
+
+<r:code lang="ruby">
+  tag 'code' do |tag|
+    CodeRay.scan( tag.expand, tag.attr['lang'] || 'ruby' ).div( :line_numbers => :table, :css => :style, :style => :cycnus )
+  end
+</r:code>
+
+Все!
+</p>
+
+<p>
+Простейшее расширение для подсветки кода в Radiant готово и его можно использовать в своем блоге. Более продвинутый вариант такого расширения можно найти <a href="http://github.com/alno/radiant-code-extension/tree" rel="nofollowe">у меня на GitHub</a>. Я добавил в него поддержку различных библиотек для подсветки кода (в частности, <a href="http://blog.alno.name/2009/02/code-highlighters-ruby/">тех, о которых писал в прошлый раз</a>).
+</p>
+
+<h2>Ссылки</h2>
+<ul>
+  <li><a href="http://wiki.radiantcms.org/Creating_Radiant_Extensions" rel="nofollow">Creating Radiant Extensions, Part 1 (En)</a></li>
+  <li><a href="http://wiki.radiantcms.org/Creating_Radiant_Extensions_B" rel="nofollow">Creating Radiant Extensions, Part 2 (En)</a></li>
+  <li><a href="http://ruby.inuse.ru/article/ustanovka-radiant-cms" rel="nofollow">Установка Radiant CMS (Ru)</a></li>
+</ul>

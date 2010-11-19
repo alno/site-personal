@@ -1,0 +1,8 @@
+Some time ago I rebuilt my blog to use excellent <a href="http://www.radiantcms.org/">Radiant CMS</a>. So, I met a problem of highlighting code in my blog. Now I'm using a highlight.js library, but thinking for server-side solution.
+
+Therefore, today I'll tell about three ruby gems for code highlighting:
+* "Syntax":http://blog.alno.name/2009/02/code-highlighters-ruby/en/#syntax
+* "UltraViolet":http://blog.alno.name/2009/02/code-highlighters-ruby/en/#ultraviolet
+* "CodeRay":http://blog.alno.name/2009/02/code-highlighters-ruby/en/#coderay
+
+Also I measured their performance and results may be found <a href="http://blog.alno.name/2009/02/code-highlighters-ruby/#performance">at the end of article</a>.

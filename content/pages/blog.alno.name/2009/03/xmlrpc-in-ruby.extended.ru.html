@@ -1,0 +1,40 @@
+<p>Для создания простейшего клиента необходимо всего лишь подключить файл <tt>xmlrpc/client</tt>, создать объект клиента и вызывать функции RPC, как методы этого объекта. А возвращаемым значением метода является хэш выходных параметров.</p>
+
+<r:code lang="ruby">
+  require 'xmlrpc/client'
+  require 'pp'
+
+  client = XMLRPC::Client.new2("http://xmlrpc-c.sourceforge.net/api/sample.php")
+  result = client.call("sample.sumAndDifference", 5, 3)
+  pp result
+</r:code>
+
+<p>Это пример с сайта официальной документации. По идее, <tt>result</tt> должен представлять из себя хэш, в котором будут содержаться возвращаемые значения. Однако, этот пример не работает (как минимум у меня). При вызове он выдает исключение:</p>
+
+<r:code>/usr/lib/ruby/1.8/xmlrpc/client.rb:555:in `do_rpc': Wrong content-type (received 'text/html' but expected 'text/xml'):  (RuntimeError)</r:code>
+
+<p>Что же не так? Сервер, к которому обращается клиент почему-то возвращает в заголовке <tt>Content-Type</tt> значение <tt>text/html</tt>, хотя ожидается <tt>text/xml</tt>. Вообще говоря, это стоит считать багом настройки сервера, но если Вы осуществляете запросы к каким-то внешним сервисам, есть вероятность, что какой-то из них так же будет отсылать некорректный <tt>Content-Type</tt>.</p>
+
+<p>Первое что мне пришло в голову - это отключить проверку в клиенте. Самый простой способ не требует никакой модификации кода библиотеки. Для этого перед использованием клиента необходимо поместить следующий код:</p>
+
+<r:code lang="ruby">
+  XMLRPC::Client.class_eval do
+    def parse_content_type(a)
+      ['text/xml']
+    end
+  end
+</r:code>
+
+<p>То есть мы просто подменяем метод <tt>parse_content_type</tt> с тем, чтобы он всегда возвращал <tt>text/xml</tt>. Теперь можно спокойно делать запросы к различным сервисам и вышеприведенный пример выведет что-то вроде:</p>
+
+<r:code lang="ruby">
+{"sum"=>8, "difference"=>2}
+</r:code>
+
+<p>Теперь можно использовать библиотеку для работы сразличными XML-RPC сервисами в сети.</p>
+
+<h2>Ссылки</h2>
+
+<ul>
+  <li><a href="http://www.ruby-doc.org/stdlib/libdoc/xmlrpc/rdoc/index.html">Ruby XMLRPC Documentation (En)</a></li>
+</ul>

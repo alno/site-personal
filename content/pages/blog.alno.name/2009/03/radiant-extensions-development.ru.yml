@@ -1,0 +1,5 @@
+title: "Разработка расширений для Radiant"
+description: "Создание простейшего расширения для Radiant CMS, осуществляющего подсветку кода."
+keywords: "ruby, rails, radiant, code highlighters, coderay, extensions"
+layout: blog_entry
+published_at: 2009-03-01T14:37:02+00:00

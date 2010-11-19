@@ -1,0 +1,148 @@
+h2. Syntax
+<a name="syntax"></a>
+
+<p>
+*Страница проекта*: <a href="http://syntax.rubyforge.org/" rel="nofollow">http://syntax.rubyforge.org/</a><br />
+*Поддерживаемые языки*: Ruby, XML, YAML<br />
+*Плюсы*: Существует плагин для Rails и описание, как интегрировать его в Radiant.<br />
+*Минусы*: Малое количество поддерживаемых языков и отсутствие готовых тем.
+</p>
+
+<p>
+Установка: 
+
+<pre><code class="bash">gem install syntax</code></pre>
+
+Простейший пример использования:
+<pre><code class="ruby">require 'rubygems'
+require 'syntax/convertors/html'
+
+convertor = Syntax::Convertors::HTML.for_syntax "ruby"
+html = convertor.convert( File.read( "program.rb" ) )
+
+puts html
+</code></pre>
+</p>
+
+<p>
+Окромя возможности подсветки кода, библиотека предоставляет возможность просто разобрать текст на лексемы, с тем чтобы производить потом какую-то обработку:
+
+<pre><code class="ruby">require 'syntax'
+
+tokenizer = Syntax.load "ruby"
+tokenizer.tokenize( File.read( "file.rb" ) ) do |token|
+  puts "group(#{token.group}, #{token.instruction}) lexeme(#{token})"
+end
+</code></pre>
+</p>
+
+<p>
+P.S: Буквально перед публикацией нашел <a href="http://rpheath.com/posts/356-github-theme-for-syntax-gem" rel="nofollow">тему</a> для библиотеки, осуществляющую подсветку как на GitHub.
+</p>
+
+h2. UltraViolet
+<a name="ultraviolet"></a>
+
+<p>
+*Страница проекта*: <a href="http://ultraviolet.rubyforge.org/" rel="nofollow">http://ultraviolet.rubyforge.org/</a><br />
+*Поддерживаемые языки*: C, C++, Ruby, Bibtex, Latex, Diff, HTML, CSS и многие другие<br />
+*Плюсы*: Использует файлы синтаксиса TextMate для подсветки, что сразу дает большое количество поддерживаемых языков.<br />
+*Минусы*: Документация на сайте достаточно скудная. При попытке копирования кода со страницы он копируется вместе с номерами строк (если они сгенерированы). Тянет за собой достаточно много зависимостей и медленней всех работает.<br />
+</p>
+
+<p>
+Установка: 
+
+<pre><code class="bash">gem install ultraviolet</code></pre>
+
+При установке у меня возникла одна проблема: Ultraviolet тянет за собой гем Oniguruma, который требует, чтобы в системе была установлена библиотека Oniguruma, причем вместе с заголовочными файлами. В Ubuntu ее можно установить из пакета:
+<pre><code class="bash">sudo apt-get install libonig2 libonig-dev</code></pre>
+
+Для остальных - неплохое руководство по установке <a href="http://snippets.aktagon.com/snippets/61-Installing-Ultraviolet-and-Oniguruma" rel="nofollow">приведено здесь</a>.
+
+Пример использования:
+
+<pre><code class="ruby">require 'rubygems'
+require 'uv'
+
+result = Uv.parse( text, "xhtml", "ruby", true, "amy")
+</code></pre>
+
+Передаваемые в функцию параметры:
+<ol>
+  <li>text - исходный код</li>
+  <li>"xhtml" - выходной синтаксис</li>
+  <li>"ruby" - входной язык</li>
+  <li>true - рендерить номера строк</li>
+  <li>"amy" - тема</li>
+</ol>
+</p>
+
+h2. CodeRay
+<a name="coderay"></a>
+
+<p>
+*Страница проекта*: <a href="http://coderay.rubychan.de/" rel="nofollow">http://coderay.rubychan.de/</a><br />
+*Поддерживаемые языки*: Ruby, C, Delphi, HTML, RHTML (Rails), Nitro-XHTML, CSS, Diff, Java, JavaScript, JSON, YAML<br />
+*Плюсы*: Судя по моим замерам работает быстрее всех. Имеет достаточно большое число опций, позволяющих настроить вывод.<br />
+*Минусы*: Встроенные темы выглядят немного бедновато, особенно применительно к C и Java. 
+</p>
+
+<p>
+Установка:
+<pre><code class="bash">gem install coderay</code></pre>
+
+Пример использования:
+<pre><code class="ruby">require 'rubygems'
+require 'coderay'
+
+tokens = CodeRay.scan( text, :ruby )
+print tokens.div( :line_numbers => :table, :css => :class, :style => :cycnus )
+</code></pre>
+
+Методы преобразования (div,html,..) принимают хэш аргументов:
+<ul>
+  <li>:tab_width - ширина табуляции в проблеах. По умолчанию: 8</li>
+  <li>:css - как включать стили: указывая класс или явный стиль (:class и :style). По умолчанию: :class)</li>
+  <li>:wrap - обернуть результат в тэг :page, :div, :span или не оборачивать (nil)</li>
+  <li>:line_numbers - как включать номера строк (:table, :inline, :list или nil)</li>
+  <li>:line_number_start - с какого номера строки начинать</li>
+  <li>:bold_every - выделять каждый n-й номер строки жирным. По умолчанию: 10</li>
+</ul>
+
+CodeRay, также как и Syntax может использоваться для анализа исходного текста, поскольку полученный объект Tokens представляет из себя по сути список лексем с заданными типами. 
+</p>
+
+h2. Сравнение производительности
+<a name="performance"></a>
+
+<p>
+Ниже приведены замеры производительности библиотек при обработке фргаментов кода на Ruby и Xml:<br />
+
+<pre>
+                          user     system      total        real
+ruby ultraviolet:    10.270000   0.600000  10.870000 ( 11.584088)
+ruby coderay:         0.710000   0.030000   0.740000 (  0.923616)
+ruby syntax:          2.030000   0.130000   2.160000 (  2.830979)
+xml ultraviolet:      3.280000   0.190000   3.470000 (  3.793856)
+xml coderay:          0.540000   0.000000   0.540000 (  0.701140)
+xml syntax:           0.660000   0.060000   0.720000 (  0.854120)
+</pre>
+
+А также график:</p>
+
+<p style="texta-align:center;"><img src="/images/ruby-code-highlighters/rch-performance.png" /></p>
+
+<p>
+Можно увидеть, что самым шустрым оказался CodeRay, а UltraViolet самым медленным. Однако, как мне кажется, некоторая тормознутость UltraViolet окупается наличием огромного количества поддерживаемых языков и готовых тем.
+</p>
+
+h2. Ссылки
+
+<ul>
+ <li><a href="http://syntax.rubyforge.org/" rel="nofollow">Syntax (En)</a></li>
+ <li><a href="http://ultraviolet.rubyforge.org/" rel="nofollow">Ultraviolet (En)</a></li>
+ <li><a href="http://coderay.rubychan.de/" rel="nofollow">Coderay (En)</a></li>
+ <li><a href="http://www.railslodge.com/ruby_gems/7-syntax" rel="nofollow">Syntax Gem (En)</a></li>
+ <li><a href="http://obvio171.wordpress.com/2007/06/03/colorful-ruby-code-for-your-blog/" rel="nofollow">Colorful Ruby code for your blog (En)</a></li>
+</ul>

@@ -1,0 +1,5 @@
+title: "Использование Boost Pointer Container Library"
+description: "Использование библиотеки Boost Pointer Container Library (ptr_container) для эффективного хранения указателей на динамически созданные объекты в различных контейнерах."
+keywords: "boost, stl, ptr_container, shared_ptr, smart_ptr, ptr_vector, ptr_map, ptr_list, vector, map, list"
+layout: blog_entry
+published_at: 2009-04-09T12:23:08+00:00
