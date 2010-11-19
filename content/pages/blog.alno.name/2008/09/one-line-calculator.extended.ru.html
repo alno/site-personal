@@ -1,0 +1,166 @@
+<h3>Файл описания</h3><a name="desktopfile"></a>
+
+Каждый апплет в KDE4 должен иметь .desktop-файл. В этом файле задается название апплета, информация о нем и имя библиотеки, из которой он должен загружаться. Для моего One-Line Calculator этот файл выглядит следующим образом:
+
+<r:code>
+[Desktop Entry]
+Name=One-Line Calculator # Название апплета
+Comment=Plasma One-Line Calculator # Комментарий к апплету
+Type=Service
+ 
+X-KDE-ServiceTypes=Plasma/Applet
+X-KDE-Library=plasma_onelinecalc # Библиотека, из которой будет загружаться апплет
+X-KDE-PluginInfo-Author=Alexey Noskov # Имя автора
+X-KDE-PluginInfo-Email=alexey.noskov@gmail.com # E-Mail автора
+X-KDE-PluginInfo-Name=onelinecalc # Внутреннее имя апплета
+X-KDE-PluginInfo-Version=0.1 # Версия
+X-KDE-PluginInfo-Website=http://blog.alno.name/ # Сайт апплета
+X-KDE-PluginInfo-Category=Examples # Категория приложения
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true 
+</r:code>
+
+<h3>Заголовочный файл</h3><a name="headerfile"></a>
+
+В этом файле описывается интерфес класса плагина. Весь нижеприведенный код тестировался мною на KDE4.1.
+
+<r:code class="cpp">
+#ifndef _ONELINECALC_H__INCLUDED_
+#define _ONELINECALC_H__INCLUDED_
+
+#include <plasma/applet.h>
+#include <plasma/widgets/lineedit.h>
+
+#include <QScriptEngine> // Заголовочный файл для скриптового движка, он будет нужен чтобы вычислять значение выражения
+
+class PlasmaOneLineCalculator : public Plasma::Applet
+{
+	Q_OBJECT
+public:
+	PlasmaOneLineCalculator(QObject *parent, const QVariantList &args);
+	~PlasmaOneLineCalculator();
+ 
+	void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect& contentsRect); // Этот метод будет вызываться для прорисовки апплета
+	void init(); // Метод инициализации апплета
+
+private slots:
+	void lineEditReturnPressed(); // Метод, который будет вызван, когда пользователь нажмет Enter в текстовом поле
+ 
+private:
+	Plasma::LineEdit lineEdit; // Текстовое поле
+	QScriptEngine scriptEngine; // Скриптовый движок для вычисления значений выражения
+};
+
+#endif//_ONELINECALC_H__INCLUDED_
+</r:code>
+
+В нижеприведенном коде следует обратить внимание на следующий момент: первым параметром K_EXPORT_PLASMA_APPLET должно указываться то же самое имя, что и в X-KDE-PluginInfo-Name.
+
+<h3>Код плагина</h3><a name="sourcefile"></a>
+
+Собственно, здесь располагается код, который обеспечивает работу плагина:
+<r:code class="cpp">
+#include "onelinecalc.h"
+#include <QPainter>
+#include <QFontMetrics>
+#include <QSizeF>
+ 
+#include <plasma/svg.h>
+#include <plasma/theme.h>
+
+K_EXPORT_PLASMA_APPLET(onelinecalc, PlasmaOneLineCalculator) // Этот макрос связывает класс апплета с его описанием в .desktop-файле. Здесь первым параметром должно указываться то же самое имя, что и в X-KDE-PluginInfo-Name.
+ 
+PlasmaOneLineCalculator::PlasmaOneLineCalculator(QObject *parent, const QVariantList &args)
+    : Plasma::Applet(parent, args),
+    lineEdit( this )
+{
+	setBackgroundHints(DefaultBackground); // Устанавливаем тип бэкграунда
+	resize(300, 50); // Устанавоиваем размер апплета по умолчанию
+
+	connect( &lineEdit, SIGNAL( returnPressed() ), this, SLOT( lineEditReturnPressed() ) ); // Связываем метод lineEditReturnPressed с событием нажатия Enter в текстовом поле
+}
+
+PlasmaOneLineCalculator::~PlasmaOneLineCalculator()
+{
+}
+
+void PlasmaOneLineCalculator::init()
+{
+}
+
+void PlasmaOneLineCalculator::lineEditReturnPressed() { // Пользователь нажал Enter
+	lineEdit.setText( scriptEngine.evaluate( lineEdit.text() ).toString() ); // Вычисляем значение выражения в текстовом поле и устанавливаем результат в качестве значения текстового поля
+}
+
+void PlasmaOneLineCalculator::paintInterface(QPainter *p, const QStyleOptionGraphicsItem */*option*/, const QRect &contentsRect)
+{
+	const int textWidth = 70; // Задаем константой ширину текста перед текстовым полем
+
+	p->setRenderHint(QPainter::SmoothPixmapTransform); // Устанавливаем параметры рендеринга
+	p->setRenderHint(QPainter::Antialiasing); // Устанавливаем параметры рендеринга
+
+ 	p->save(); // Сохраняем состояние контекста рисования
+	p->setPen(Qt::white); // Устанавливаем цвет прорисовки
+	p->drawText(contentsRect,Qt::AlignLeft | Qt::AlignVCenter,"Calculate:"); // Рисуем текст слева
+	p->restore(); // Восстанавливаем параметры
+
+	lineEdit.setGeometry(QRect(contentsRect.x() + textWidth,contentsRect.y(),contentsRect.width() - textWidth, contentsRect.height())); // Устанавливаем размеры для текстового поля
+}
+</r:code>
+
+<h2>Сборка</h2>
+
+Для сборки апплета я использовал CMake, поскольку с его помощью это делается проще всего, насколько я понял. Для использования CMake необходимо в директории с исходниками создать файл CMakeLists.txt, в котором, используя любой текстовый редактор описать сборку. Описание состоит из нескольких частей:
+<ol>
+	<li>Указание модулей CMake, которые используются при сборке.</li>
+	<li>Описание собствено процесса сборки: исходные файлы, цели сборки, include-директории и т.п.</li>
+	<li>Описание процесса инсталляции: какие файлы куда в системе необходимо поместить.</li>
+</ol>
+
+Листинг CMake-файла с комментариями:
+<r:code>
+project(onelinecalc) # Здесь указываем название проекта
+ 
+find_package(KDE4 REQUIRED) # Указываем, что требуется модуль для KDE4
+include(KDE4Defaults)
+find_package(Plasma REQUIRED) # Указываем, что требуется модуль для Plasma
+ 
+add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+include_directories( ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ) # Добавляем директории для поиска include-файлов
+ 
+set(onelinecalc_SRCS onelinecalc.cpp) # В переменную onlinecalc_SRS записываем исходные файлв плагина. В данном случае только один - onlinecalc.cpp
+ 
+kde4_add_plugin(plasma_onelinecalc ${onelinecalc_SRCS}) # Собираем библиотеку plasma_onelinecalc как плагин KDE4. Имя библиотеки должно совпадать с указанным в X-KDE-Library
+target_link_libraries(plasma_onelinecalc ${PLASMA_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTSCRIPT_LIBRARY}) # Указываем, какие дополнительные библиотеки линковать
+ 
+install(TARGETS plasma_onelinecalc DESTINATION ${PLUGIN_INSTALL_DIR}) # Скомпилированную библиотеку устанавливаем в директорию плагинов KDE4
+install(FILES plasma-onelinecalc.desktop DESTINATION ${SERVICES_INSTALL_DIR}) # Файл с описанием апплета устанавливаем в директорию сервисов KDE4
+</r:code>
+
+Еще раз: имя цели сборки должно совпадать с тем, которое было указано в X-KDE-Library
+
+<h2>Установка и тестирование</h2>
+
+Теперь, для того чтобы собрать апплет, необходимо вызвать следующие команды в директории с исходниками:
+<r:code class="bash">
+mkdir build # Создаем директорию для сборки
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=<KDE installation prefix> .. # Генерируем make-файл
+make # Собираем проект
+sudo make install # Устанавливаем апплет
+kbuildsycoca4 # Перестраиваем кэш в KDE4
+</r:code>
+
+Просмотреть результат работы можно вызвав команду:
+<r:code class="bash">
+plasmoidviewer onelinecalc
+</r:code>
+
+Для того, чтобы апплет можно было поместить на рабочий стол, необходимо перезапустить plasma:
+<r:code class="bash">
+kquitapp plasma
+plasma
+</r:code>
+
+<noindex>Вот и все. Скачать плагин можно тут: <a rel="nofollow" href="http://www.kde-look.org/content/show.php/show.php?content=89524">One-Line Calculator KDE-Look.org</a></noindex>

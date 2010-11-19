@@ -1,0 +1,3 @@
+* "Использование Boost::Spirit":http://blog.alno.name/2008/09/parsers-in-cpp-with-boost-spirit/
+* "Регулярные выражения в С++: использование Boost::Regex":http://blog.alno.name/2008/10/using-boost-regex/
+* "Регулярные выражения с использованием Boost::Xpressive":http://blog.alno.name/2008/12/using-boost-xpressive/

@@ -1,0 +1,5 @@
+title: "Boost::Xpressive - Альтернатива Boost::Regex"
+description: "Использование альтернативной библиотеки регулярных выражений: Boost::Xpressive, позволяющей описывать регулярные выражения на C++ как динамически, так и статически"
+keywords: "регулярные выражения, regular expressions, c++, boost, xpressive, sregex, regex, regexp, match, regex_match, regex_search, regex_replace, регулярные выражения c++"
+layout: blog_entry
+published_at: 2008-12-03T10:18:00+00:00

@@ -1,0 +1,5 @@
+title: "Логирование в Java: Использование slf4j"
+description: "Использование библиотеки SLF4J для логирования в Java. Возможность ее интеграции с LOG4J."
+keywords: "java, logging, slf4j, log4j, логирование, logger"
+layout: blog_entry
+published_at: 2008-05-20T04:23:00+00:00

@@ -1,0 +1,159 @@
+<h2>Объявление контейнеров</h2>
+
+<p>Для объявления multi_index контейнера используется шаблон boost::multi_index_container, имеющий три аргумента:</p>
+
+<ul>
+	<li>Тип элемента в контейнере</li>
+	<li>(необязательно) Описание индексов контейнера</li>
+	<li>(необязательно) Аллокатор, для элементов контейнера</li>
+</ul>
+
+<p>Для описания индексов контейнера используется шаблон boost::multi_index::indexed_by, принимающий в качестве аргументов список индексов, необходимых контейнеру.</p>
+
+<p>Таким образом, описание multi_index контейнера принимает следующую форму:</p>
+
+<r:code class="cpp">boost::multi_index_container < ElementType, boost::multi_index::indexed_by < > ></r:code>
+
+<p>В библиотеке поддерживаются следующие типы индексов:</p>
+
+<ul>
+	<li>Упорядоченные (ordered)</li>
+	<li>Хэш (hashed)</li>
+	<li>Последовательные (sequenced)</li>
+</ul>
+
+<h3>Упорядоченные индексы</h3>
+
+<p>Упорядоченные индексы используются для доступа к элементам, выстроенным в каком-то определенном порядке, аналогично контейнеру std::map. Они практически полностью повторяют его интерфейс, за исключением некоторых незначительных ограничений.</p>
+
+<p>Упорядоченные индексы подразделяются на <em>уникальные</em> и <em>неуникальные,</em> разница между которыми состоит в возможности хранения в контейнере нескольких элементов с одинаковым значением ключа.</p>
+
+<p>Упорядоченные индексы обьявляются одним из следующих вариантов:</p>
+<ul>
+	<li>
+<p style="margin-bottom: 0in;"><span style="font-family: Courier New,monospace;"><span style="font-size: x-small;">(ordered_unique 	| ordered_non_unique)</span></span></p>
+</li>
+</ul>
+<p style="margin-bottom: 0.2in;"><span style="font-family: Courier New,monospace;"><span style="font-size: x-small;"><span style="font-size: x-small;">&lt;[</span><span style="font-size: x-small;"><em>(tag)</em></span><span style="font-size: x-small;">[,</span><span style="font-size: x-small;"><em>(key extractor)</em></span><span style="font-size: x-small;">[,</span><span style="font-size: x-small;"><em>(comparison predicate)</em></span><span style="font-size: x-small;">]]]&gt;</span></span></span></p>
+
+<ul>
+	<li>
+<p style="margin-bottom: 0in;"><span style="font-family: Courier New,monospace;"><span style="font-size: x-small;">(ordered_unique 	| ordered_non_unique)</span></span></p>
+</li>
+</ul>
+<p style="margin-bottom: 0.2in;"><span style="font-family: Courier New,monospace;"><span style="font-size: x-small;"><span style="font-size: x-small;">&lt;[</span><span style="font-size: x-small;"><em>(key extractor)</em></span><span style="font-size: x-small;">[,</span><span style="font-size: x-small;"><em>(comparison predicate)</em></span><span style="font-size: x-small;">]]&gt;</span></span></span></p>
+
+<p>Необязательный параметр tag используется для более удобного доступа к  индексам в контейнере. В качестве значения параметра должен выступать предикат boost::multi_index::tag, с одним параметром - именем типа.</p>
+
+<p>Если параметр указан, то для получения индекса из контейнера можно использовать не только  его порядковый номер, но также и имя типа, переданного в tag.</p>
+
+<p>Значением параметра key extractor является предикат, специфицирующий получение значения ключа по значению элемента контейнера. Наиболее часто используемые предикаты это:</p>
+<ul>
+	<li>identity&lt;ElementType&gt; - в качестве ключа 	используется весь элемент контейнера. 	Параметр – тип элемента в контейнере.</li>
+	<li>member&lt;ElementType,KeyType,MemberPtr&gt; - в качестве 	ключа используется какой-либо член 	элемента контейнера. Параметры – тип 	элемента, тип ключа и указатель на 	значение ключа в структуре элемента.</li>
+	<li>const_mem_fun&lt;ElementType,KeyType,MemberFunPtr&gt; - в 	качестве ключа используется значение 	какого-либо константного метода 	элемента. Параметры – тип элемента, 	тип ключа и указатель на метод получения 	ключа в элементе.</li>
+</ul>
+
+<p>Значением параметра comparsion predicate является предикат сравнения ключей, который должен упорядочивать ключи, аналогично std::less или std::greater.</p>
+
+<p>Примеры задания упорядоченных индексов:</p>
+
+<r:code class="cpp">ordered_unique<identity<employee> >
+ordered_non_unique<member<employee,std::string,&employee::name>,std::greater<std::string> ></r:code>
+
+<h3>Хэш индексы</h3>
+
+<p>Хэш индексы, так же как и упорядоченные индексы реализуют доступ к элементу по ключу. Их основное отличие от упорядоченных индексов состоит в том, что они не хранят какой-либо информации о порядке, однако их использование для получения элементов по значению ключа может быть значительно эффективней.</p>
+
+<p>Также, как и упорядоченные, хэш индексы подразделяются на уникальные и неуникальные и могут быть описаны следующим образом:</p>
+<ul>
+	<li>
+<p style="margin-bottom: 0in;"><span style="font-family: Courier New,monospace;"><span style="font-size: x-small;">(hashed_unique 	| hashed_non_unique)</span></span></p>
+</li>
+</ul>
+<p style="margin-left: 0.39in; margin-right: 0.39in; margin-bottom: 0in;"><span style="font-family: Courier New,monospace;"><span style="font-size: x-small;"><span style="font-size: x-small;">&lt;[</span><span style="font-size: x-small;"><em>(tag)</em></span><span style="font-size: x-small;">[,</span><span style="font-size: x-small;"><em>(key extractor)</em></span><span style="font-size: x-small;">[,</span><span style="font-size: x-small;"><em>(hash function)</em></span><span style="font-size: x-small;">[,</span><span style="font-size: x-small;"><em>(equality predicate)</em></span><span style="font-size: x-small;">]]]]&gt;</span></span></span></p>
+
+<ul>
+	<li>
+<p style="margin-right: 0.39in; margin-bottom: 0in;"><span style="font-family: Courier New,monospace;"><span style="font-size: x-small;">(hashed_unique 	| hashed_non_unique)</span></span></p>
+</li>
+</ul>
+<p style="margin-left: 0.39in; margin-right: 0.39in; margin-bottom: 0.2in;"><span style="font-family: Courier New,monospace;"><span style="font-size: x-small;"><span style="font-size: x-small;">&lt;[</span><span style="font-size: x-small;"><em>(key extractor)</em></span><span style="font-size: x-small;">[,</span><span style="font-size: x-small;"><em>(hash function)</em></span><span style="font-size: x-small;">[,</span><span style="font-size: x-small;"><em>(equality predicate)</em></span><span style="font-size: x-small;">]]]&gt;</span></span></span></p>
+Параметры tag и key extractor полностью аналогичны тем, что используются в упорядоченных индексах и были описаны выше.
+
+Хэш функция – основа возможностей быстрого поиска в хэш индексах. Это должен быть предикат, возвращающий значение std::size_t и принимающий один аргумент – значение ключа. В идеале, каждый ключ должен преобразовываться в уникальное значение, но в реальности ( в общем случае ) это невозможно. Поэтому, хорошая хэш функция должна обеспечивать быстрое преобразование ключа с максимально близкой к нулю вероятностью коллизии. Эта вероятность зависит от статистики ключей в конкретном приложении, поэтому невозможно предоставить такую функцию, которая давала бы оптимальные результаты всегда.
+
+Однако, значение параметра по умолчанию обеспечивает достаточно неплохие результаты работы в большинстве случаев.
+
+Последний параметр – предикат равенства для ключей. Он определяет какие ключи считать идентичными. В большинстве случаев, значение по умолчанию <r:code class="cpp">std::equal_to<KeyFromValue::result_type></r:code> обеспечивает именно то, что требуется.
+<h3>Последовательные индексы</h3>
+
+<p>В отличие от упорядоченных и хэш индексов, элементы в последовательных индексах не предполагают какого-либо устойчивого порядка: элементы могут быть размещены в любой позиции, аналогично интерфейсу std::list.</p>
+
+<p>Практически все операции, допустимые с std::list, допустимы и с последовательными индексами. Отличие состоит в том, что итераторы последовательных индексов не предоставляю возможности изменения значения элементов.</p>
+
+<p>Последовательные индексы объявляются следующим образом:</p>
+<r:code class="cpp">sequenced<[(tag)]></r:code>
+<p>Необязательный параметр tag обозначает таг, используемый для доступа к индексам, и уже был описан выше.</p>
+
+<h2>Использование контейнеров</h2>
+
+<p>После обьявления контейнера, доступ к его индексам можно получить через метод get&lt;Param&gt;(), где шаблонный параметр это или порядковый номер индекса в контейнере, или имя типа, используемое в таге индекса.</p>
+
+<p>Интерфейс, предоставляемый индексами практически полностью аналогичен интерфейсу соответствующих STL контейнеров.</p>
+
+<p>Для доступа к типам индексов и их итераторов в контейнере используются следующие типы, вложенные в boost::multi_index_container:</p>
+
+<r:code clas="cpp">
+template<int N>
+struct nth_index {typedef implementation defined type;};
+
+template<typename Tag>
+struct index {typedef implementation defined type;};
+
+template<int N>
+struct nth_index_iterator {typedef implementation defined type;};
+
+template<typename Tag>
+struct index_iterator  {typedef implementation defined type;};
+
+template<typename Tag>
+struct index_const_iterator {typedef implementation defined type;};
+</r:code>
+<h3>Специальные операции поиска</h3>
+<p>Дополнительно к стандартным операциям поиска в соответствующих STL контейнерах, boost::multi_index предоставляет следующие операции в упорядоченных индексах:
+<ul>
+	<li>lower_bound – итератор на первый элемент, 	с переданным значением ключа</li>
+	<li>upper_bound – итератор на следующий за 	последним элементом, с переданным 	значением ключа.</li>
+	<li>range – пара итераторов, указывающих 	на начало и конец промежутка, определяемого 	предикатами, переданными в качестве 	параметров. Часто используется вместе 	с boost::lambda</li>
+	<li>equal_range – пара итераторов, указывающих 	на начало и конец промежутка элементов, 	содержащих заданное значение ключа.</li>
+</ul>
+Примеры использования этих методов:</p>
+
+<ol><li><r:code class="cpp">
+using namespace boost::lambda;
+typedef multi_index_container<double>double_set;
+double_set s;
+
+...
+
+double_set::iterator it0=s.upper_bound(100.0);
+double_set::iterator it1=s.lower_bound(200.0);
+// Промежуток [it0,it1) содержит элементы (100,200)
+</r:code></li><li><r:code class="cpp">
+std::pair<double_set::iterator,double_set::iterator> p=s.range(100.0<=_1,_1<=200); // 100<= x <=200
+...
+p=s.range(100.0<_1,_1<200);   // 100 < x < 200
+...
+p=s.range(100.0<=_1,_1<200);  // 100 <= x < 200
+</r:code></li><li><r:code class="cpp">
+p=s.range(100.0 <= _1,unbounded); // 100 ,= x
+p=s.range(unbounded,_1 < 200.0);  // x < 200
+p=s.range(unbounded,unbounded); // Эквиваленто std::make_pair(s.begin(),s.end())
+</r:code></li></ol>
+
+<h3 class="western">Проекция итераторов</h3>
+Для получения итераторов на один индекс по итераторам на другой индекс boost::multi_index предоставляет специальный метод итератора project, который принимает один шаблонный параметр – номер индекса к которому необходимо преобразовать итератор, или же его таг.
+
+Пример использования:
+<r:code class="cpp">employee_set::iterator it2=es.project<0>( it1 ); // obtain an iterator of index #0 from it1</r:code>

@@ -1,0 +1,20 @@
+Здесь я кратко опишу основные ошибки, которые могут возникнуть при размещении Rails-приложения на fcgi и методы их решения.
+
+Основные симптомы нижеописанных ошибок:
+<ul>
+	<li>Вместо приложения, отображается:
+<ul>
+	<li>Содержимое файла dispatch.fcgi</li>
+</ul>
+<ul>
+	<li>505 Rails application failed to start</li>
+</ul>
+</li>
+	<li>В логе ошибок появляются строки вида:
+<ul>
+	<li>[warn] mod_fcgid: Read data error, fastcgi server has close connection</li>
+	<li>[error] [client xxx.xxx.xxx.xxx] Premature end of script headers: dispatch.fcgi</li>
+</ul>
+</li>
+	<li>Загрузка каждой страницы приложения занимает несколько секунд</li>
+</ul>

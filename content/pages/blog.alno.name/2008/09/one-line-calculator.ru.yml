@@ -1,0 +1,5 @@
+title: "Создание плазмоидов: One-Line Calculator"
+description: "О том, как писать апплеты для KDE4 на примере апплета One-Line Calculator."
+keywords: "plasmoids, calculator, qt, qscriptengine, plasma, kde, c++, cmake"
+layout: blog_entry
+published_at: 2008-09-19T11:46:00+00:00

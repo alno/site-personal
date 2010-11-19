@@ -1,0 +1,139 @@
+<h2>Настройка проекта</h2>
+Для того, чтобы разрабатывать графические приложения с использованием JFace в Eclipse, необходимо подключить jar-файлы SWT и JFace.
+<ul>
+	<li>В случае, если в Eclipse установлено PDE, то это можно сделать, указав в настройках проекта использовать библиотеку SWT, и поставить галочку для поддержки JFace.</li>
+	<li>Если же PDE не установлен, то необходимо подключить jar-файлы к проекту вручную. Найти их можно в директории plugins эклипса, называются они <strong>org.eclipse.swt_*.jar</strong> и <strong>org.eclipse.jface_*.jar</strong></li>
+</ul>
+
+<h2>Создание окна</h2>
+
+<p>Окно приложения в JFace наследуется от класса ApplicationWindow, предоставляющего возможности для создания меню, панелей управления и строки статуса.</p>
+
+<p>Простейший вариант создания окна приведен в следующем примере:
+<r:code class="java">import org.eclipse.jface.window.ApplicationWindow;
+import org.eclipse.swt.widgets.Display;
+
+public class MainWindow extends ApplicationWindow {
+
+public static void main(String[] args) {
+MainWindow window = new MainWindow(); // Создаем наше окно
+window.setBlockOnOpen( true ); // Устанавливаем флаг - ждать закрытия окна
+window.open(); // Открываем окно
+
+Display.getCurrent().dispose(); // Освобождаем ресурсы
+}
+
+public MainWindow() {
+super( null ); // Вызываем конструктор родительского класса
+}
+
+}</r:code></p>
+
+<h2>Создание содержимого окна</h2>
+
+<p>Для того, чтобы создать какое-то содержимое окна, необходимо переопределить метод <strong>Control createContents( Composite parent )</strong> класса ApplicationWindow. Метод должен возвращать компонент, который будет являться содержимым окна.</p>
+
+<p>В этом же методе можно установить и заголовок окна, вызвав метод <b>setText( String text )</b> шелла, доступного по вызову <b>getShell()</b></p>
+
+<p>В этом примере таким компонентом будет просто метка белого цвета, в реальных приложениях таким компонентом является какой-нибудь композит.</p>
+
+<p>Собственно, пример:
+<r:code class="java">protected Control createContents( Composite parent ) {
+	getShell().setText("My window"); // Устанавливаем заголовок окна
+	Label lbl = new Label( parent, SWT.NONE ); // Создаем новый элемент, в нашем случае - просто метку
+	lbl.setText( "Window contents" ); // Устанавливаем ей текст
+	lbl.setBackground( new Color( Display.getCurrent(), 255, 255, 255 ) ); // Устанавливаем белый цвет фона
+	return lbl;
+}</r:code></p>
+
+<h2>Добавление статусной строки</h2>
+
+Добавление к окну приложения статусной строки реализуется не просто, а очень просто. Для этого надо всего-навсего вызвать защищенный метод <strong>addStatusBar()</strong>. Наверное, наиболее подходящим местом для такого вызова является конструктор окна, или какой-нибудь метод его инициализации.
+
+Для того, чтобы отобразить текст в статусной строке необходимо вызвать метод <strong>setStatus( String status )</strong>, аргументом которого и является та самая строка, которую необходимо отобразить.
+
+<h2>Создание меню</h2>
+
+Для создания строки меню в JFace необходимо, вызвать метод <strong>addMenuBar()</strong>, как и для создания строки статуса.
+Но затем необходимо добавить пункты меню на панель. Осуществляется это следующим образом:
+<ul>
+	<li>Раздел меню описывается классом <strong>MenuManager</strong>. В конструкторе ему может быть передана строка - имя раздела, где символ "&amp;" означает, что следующий за ним символ будет ключом при навигации с помошью клавиши Alt. Добавляется раздел меню на панель с помощью конструкции <strong>getMenuBar().add( menu )</strong>.</li>
+	<li>Пункт меню описывается классом <strong>Action</strong>. Сам класс является абстрактным, пункт меню должен быть унаследован от него и переопределять метод <strong>void run()</strong>, в котором размещается код, выполняемый при выборе пункта меню пользователем. На самом деле, метод можно и не переопределять, но тогда, зачем этот пункт меню нужен?=) Имя пункта может быть задано путем передачи в конструктор, или вызовом метода <strong>void setText( String text )</strong>. После создания пункт меню добавляется в раздел вызовом метода <strong>add</strong> у объекта раздела меню. Например: <strong>menu.add( menuItem )</strong></li>
+	<li>Подменю создаются очень просто: Необходимо в один раздел меню методом add добавить другой раздел. Вот и все.</li>
+</ul>
+В следующем примере мы создаем раздел меню File и один пункт Hello в нем, выбор которого вызывает появление текста в статусной строке окна. Код создания меню я оформил в один метод, который вызывается из конструктора окна:
+<r:code class="java">private void createMenu() {
+addMenuBar(); // Добавляем панель меню
+
+MenuManager fileMenu = new MenuManager( "&amp;File" ); // Создаем новое меню
+getMenuBarManager().add( fileMenu ); // Добавляем меню на панель
+fileMenu.add( new Separator() ); // Добавляем разделитель в меню
+fileMenu.add( new Action( "&amp;Hello" ) { // Создаем новое действие, указываем его текст
+
+	@Override
+	public void run() { // Код выполняемый при активации действия
+		setStatus("Hello world!!"); // Мы просто отображаем новое значение в статусной строке
+	}
+
+} ); // И добавляем действие в качестве пункта меню
+}</r:code>
+
+<h2>Создание панели инструментов</h2>
+
+<p>Для того, чтобы создать панель инструментов в окне необходимо в конструкторе окна вызвать метод <strong>addToolBar( int style )</strong>, в который передать стиль компонента панели.</p>
+
+<p>Для доступа к созданной панели используется метод <strong>getToolBarManager()</strong>. Для добавления действия на панель используется метод <strong>add</strong> панели, куда передается действие.</p>
+
+<p>В простейшем случае создание панели и добавление на нее кнопки будет выглядеть:</p>
+
+<r:code class="java">private void createToolBar() {
+	addToolBar( SWT.NONE );
+	getToolBarManager().add( new Action( "&amp;Hello" ) { // Создаем новое действие, указываем его текст
+
+		@Override
+		public void run() { // Код выполняемый при активации действия
+			setStatus("Hello world!!"); // Мы просто отображаем новое значение в статусной строке
+		}
+
+	} );
+}</r:code>
+
+<h2>Создание нескольких перемещаемых панелей инструментов</h2>
+
+<p>Вместо одной панели инструментов можно создать набор перемещаемых панелей (<strong>CoolBar</strong>). Для этого необходимо:
+<ol>
+	<li>Вместо метода <strong>addToolBar</strong> вызвать метод <strong>addCoolBar</strong></li>
+	<li>Для доступа к набору панелей используется метод <strong>getCoolBarManager()</strong></li>
+	<li>Создать панель инструментов, на которую можно будет добавлять действия. Для этого необходимо создать новый экземпляр класса <strong>ToolBarManager</strong>, который будет представлять панель и вызвать метод <strong>add</strong> у CoolBarManager, передав  туда панель.</li>
+	<li>На созданную панель можно добавлять действия</li>
+</ol>
+Пример кода, создающего две плавающие панели:
+<r:code class="java">private void createCoolbar() {
+	addCoolBar( SWT.NONE );
+
+	ToolBarManager tm = new ToolBarManager();
+	getCoolBarManager().add( tm );
+	tm.add( helloAction );
+
+	ToolBarManager tm2 = new ToolBarManager();
+	getCoolBarManager().add( tm2 );
+	tm2.add( helloAction );
+	tm2.add( helloAction );
+}</r:code>
+<strong>Важно! Окно приложение может иметь или одну панель управления или набор перемещаемых, попытка создания и того и другого приведет к ошибке!</strong></p>
+
+<h2>Возможные проблемы</h2>
+
+<p>Здесь будут описаны некоторые проблемы, с которыми можно столкнуться:
+<ul>
+<li><b>При добавлении пунктов меню после запуска приложения они не появляются</b> - чтобы изменения меню после создания окна отобразились на нем, необходимо вызвать метод <b>getMenuBarManager().update( true )</b> - указать обновить панель меню.</li>
+</ul></p>
+
+<h2>Ссылки</h2>
+
+<p>Дополнительная информация по JFace может быть найдена по следующим ссылкам:
+<ul>
+	<li><a href="http://www.ibm.com/developerworks/ru/opensource/library/os-jface1/index.html">Русскоязычная вводная статья на ibm.com</a></li>
+	<li><a href="http://www.ibm.com/developerworks/views/opensource/libraryview.jsp?topic_by=All+topics+and+related+products&amp;search_by=Using+the+Eclipse+GUI+outside+the+Eclipse+Workbench">Цикл англоязычных статей на ibm.com</a></li>
+	<li><a href="http://help.eclipse.org/help32/topic/org.eclipse.platform.doc.isv/reference/api/index.html">Описание API Eclipse</a> - среди прочего там есть и пакеты, относящиеся к SWT и JFace</li>
+</ul></p>

@@ -1,0 +1,40 @@
+<p>Если же приложение надо разместить не в корне домена, а в какой-то директории, то проблема решается добавлением одной директивы <strong>RailsBaseURI</strong>, например, если уже имеется следующая настройка домена:
+
+<r:code class="apache">&lt;VirtualHost *:80&gt;
+ServerName www.phusion.nl
+DocumentRoot /websites/phusion
+&lt;/VirtualHost&gt;</r:code>
+То для того, чтобы разместить прилоожение в директорию Rails, необходимо создать символическую ссылку из /websites/phusion/rails в public-директорию приложения:
+<r:code class="bash">ln -s /webapps/mycook/public /websites/phusion/rails</r:code>
+Затем, в конфигурацию хоста добавить строку:
+<r:code class="apache">RailsBaseURI /rails</r:code>
+Итого, полная конфигурация будет:
+<r:code class="apache">&lt;VirtualHost *:80&gt;
+ServerName www.phusion.nl
+DocumentRoot /websites/phusion
+RailsBaseURI /rails                # Новая строка, указывающая путь к приложению
+&lt;/VirtualHost&gt;
+</r:code></p>
+
+<h2>Перезапуск приложения</h2>
+<p>Приложение может быть перезапущено двумя способами:
+<ul>
+	<li>Перезапуск Apache<em></em></li>
+	<li>Создание или модификация файла <strong><em>tmp/restart.txt</em> </strong>в директории приложения</li>
+</ul></p>
+
+<h2>Конфигурация</h2>
+<p>Модуль может быть сконфигурирован различными директивами. Наиболее полезные из них:
+<ul>
+	<li><strong>RailsEnv</strong> - задает среду выполнения приложения. Значение по умолчанию: <em>production</em>.</li>
+	<li><strong>RailsBaseURI</strong> - задает директорию, в которую размещается приложение. По этому адресу должна находиться директория public приложения.</li>
+	<li><strong>RailsRuby</strong> - задает интерпретатор, который будет использован для выполнения приложения. Имеет смысл, если у Вас установлено несколько интерпретаторов Руби.</li>
+	<li><strong>RailsMaxPoolSize</strong> - максимальное количество запущенных экземпляров приложения. Оптимально значение зависит от конфигурации системы. Значение по умолчанию: 20.</li>
+	<li><strong>RailsPoolIdleTime</strong> - максимальное время бездействия экземпляра приложения в секундах. По истечении этого времени экземпляр приложения будет остановлен для экономии памяти. Разработчики рекомендуют в качестве оптимального значения <em>2*x</em>, где <em>x</em> - время, которое пользователь тратит на просмотр страницы. Значение по умолчанию: 120.</li>
+</ul></p>
+<h2>Ссылки</h2>
+<p>Больше информации можно найти:
+<ul>
+	<li><a title="Сайт модуля" href="http://www.modrails.com/">http://www.modrails.com/</a></li>
+	<li><a title="Документация модуля" href="http://www.modrails.com/documentation/Users%20guide.html">http://www.modrails.com/documentation/Users%20guide.html</a></li>
+</ul></p>

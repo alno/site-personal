@@ -1,0 +1,87 @@
+Тестовый код, для каждой ленты и каждого парсера осуществляет перебор всех записей в ленте и получение из них ссылки, заголовка и описания.
+<r:code class="ruby">
+# gems: syndication, rubyrss, simple-rss, feedtools
+
+require 'benchmark'
+require 'rubygems'
+require 'open-uri'
+
+require 'rss'
+require 'simple-rss'
+require 'feed_tools'
+require 'syndication/rss'
+require 'feed-normalizer'
+
+def process_items( channel )
+  for i in channel.items do
+    i.link
+    i.title
+    i.description
+  end
+end
+
+def process_entries( channel )
+  for i in channel.entries do
+    i.url
+    i.title
+    i.description
+  end
+end
+
+def test_feed( x, fn )
+  feed_uri = 'http://localhost/' + fn + '.xml'
+
+  x.report(fn +  ' std:') do
+    rss = RSS::Parser.parse open( feed_uri )
+    process_items( rss.channel )
+  end
+  x.report(fn +  ' simple-rss:') do
+    rss = SimpleRSS.parse open( feed_uri )
+    process_items( rss )
+  end
+  x.report(fn +  ' feed_tools:') do
+    rss = FeedTools::Feed.open( feed_uri )
+    process_items( rss )
+  end  
+  x.report(fn +  ' syndication:') do
+    rss = Syndication::RSS::Parser.new.parse open( feed_uri )
+    process_items( rss )
+  end
+  x.report(fn +  ' feednormalizer:') do
+    rss = FeedNormalizer::FeedNormalizer.parse open( feed_uri )
+    process_entries( rss )
+  end
+end
+
+Benchmark.bm( 30 ) do |x|
+  test_feed( x, 'feed1' )
+  test_feed( x, 'feed2' )
+end
+</r:code>
+
+В результате тестирования я получил следующие результаты:
+<pre>
+                                    user     system      total        real
+feed1 std:                      0.180000   0.020000   0.200000 (  0.198390)
+feed1 simple-rss:               0.350000   0.000000   0.350000 (  0.357668)
+feed1 feed_tools:               2.890000   0.100000   2.990000 (  4.549775)
+feed1 syndication:              0.200000   0.000000   0.200000 (  0.357392)
+feed1 feednormalizer:           0.060000   0.020000   0.080000 (  0.095391)
+
+feed2 std:                      0.090000   0.000000   0.090000 (  0.098271)
+feed2 simple-rss:               7.930000   0.020000   7.950000 (  8.099210)
+feed2 feed_tools:               1.650000   0.040000   1.690000 (  1.821087)
+feed2 syndication:              5.090000   0.000000   5.090000 (  5.614216)
+feed2 feednormalizer:           0.080000   0.000000   0.080000 (  0.095330)
+</pre>
+
+Или в виде графика:
+<img src="/images/ruby-rss-parsers/performance.png" />
+
+<h2>Ссылки</h2>
+<ul>
+	<li><a href="http://simple-rss.rubyforge.org/">SimpleRSS</a></li>
+	<li><a href="http://sporkmonger.com/projects/feedtools/">FeedTools</a></li>
+	<li><a href="http://syndication.rubyforge.org/doc/">Syndication</a></li>
+	<li><a href="http://feed-normalizer.rubyforge.org/">FeedNormalizer</a></li>
+</ul>

@@ -1,0 +1,153 @@
+
+<h2>Реализация свойств</h2>
+
+Основные идеи реализации следующие:
+<ul>
+<li><b>Шаблон класса свойства не содержит полей!</b> Геттеры и сеттеры передаются в класс в виде шаблонных параметров, о том как извлекается указатель на объект-владелец чуть позже. Эта особенность имеет два важных следствия:
+<ul>
+<li>Длина класса минимальна, определяется компилятором</li>
+<li>Можно хранить класс в занятой памяти. То есть, можно создать 100 свойств в одном и том же участке памяти, они не будут перекрываться по данным, потому что данных у них нет.</li>
+</ul>
+</li>
+<li>Все классы свойств упаковываются в <b>union</b>, чтобы лежать в одном и том же участке. Именно поэтому размер класса не зависит от количества свойств.</li>
+<li>Также в этот union добавляется член <b>__properties</b>, используемый для того, что свойства могли определять смещение union относительно начала класса.</li>
+<li>Зная смещение, каждое свойство определяет адрес объекта-владельца вычитая смещение из собственного адреса. Это вычисление вынесено в отдельный метод в классе <b>properties</b></li>
+<li>Чтобы скрыть реализацию, определяются несколько макросов, упрощающих работу с этой структурой.</li>
+</ul>
+Ниже приведен код, предоставляющий реализацию
+<r:code class="cpp">
+/**
+ * Класс, предоставляющий общие сервисы для свойств, а также используемый для хранения в классе позиции свойств.
+ */
+template <
+	typename PropertyOwner // Класс владельца
+>
+class properties {
+public:
+	static PropertyOwner * owner( void * property ) { // Получить указатель на владельца по указателю на свойство
+		int aai = (int)&(((PropertyOwner*)0)->__properties);
+		return (PropertyOwner *)((char*)property - aai);
+	}
+};
+
+/**
+ * Шаблон класса свойства
+ */
+template <
+	typename PropertyOwner, // Класс владельца
+	typename PropertyType, // Тип свойства
+	PropertyType (PropertyOwner::*getter)(), // Геттер
+	void (PropertyOwner::*setter)(PropertyType) > // Сеттер
+class property {
+public:
+	
+	/**
+	 * Чтение свойства - вызов геттера
+	 */
+	operator PropertyType() {
+		return (properties<PropertyOwner>::owner( this )->*getter)();
+	}
+	
+	/**
+	 * Запись в свойство - вызов сеттера
+	 */
+	void operator = ( const PropertyType & value ) {
+		(properties<PropertyOwner>::owner( this )->*setter)( value );
+	}
+};
+
+// Макросы для удобного определения свойств /////////
+
+/**
+ * Начать объявления свойств в классе cls
+ */
+#define properties_start(cls) union { properties<cls> __properties;
+
+/**
+ * Закончить объявление свойств в классе cls
+ */
+#define properties_end() };
+
+/**
+ * Объявить свойство в классе cls типа type c геттером getter и сеттером setter
+ */
+#define property(cls,type,getter,setter) property<cls,type,&cls::getter,&cls::setter>
+</r:code>
+
+<h2>Использование свойств</h2>
+Как объявить свойства в классе?
+<ul>
+<li>Все свойства объявляются в блоке, который начинается вызовом <b>properties_start(&lt;classname&gt;)</b> и заканчивается <b>properties_end()</b>.</li>
+<li>Внутри блока каждое свойство объявляется конструкцией <b>property(&nbsp;cls,&nbsp;type,&nbsp;getter,&nbsp;setter&nbsp;)</b>, аргументы которой - имя класса, тип свойства, имя метода-геттера, имя метода-сеттера.</li>
+</ul>
+Вот пример, демонстрирующмй объявление:
+<r:code class="cpp">
+class CClass {
+private:
+	int a_value;
+	
+	/**
+	 * Геттер
+	 */
+	int getA() {
+		return a_value;
+	}
+	
+	/**
+	 * Сеттер
+	 */
+	void setA( int a ) {
+		a_value = a;
+	}
+	
+public:	
+	properties_start( CClass ); // Начало свойств
+	
+	property( CClass, int, getA, setA ) a; // Свойство
+	
+	properties_end(); // Конец свойств
+};
+</r:code>
+
+Использование свойств:
+<r:code class="cpp">int main( int argc, char ** argv ) {
+	CClass c;
+
+	c.a = 145; // Запись свойства	
+	int aa = c.a; // Чтение свойства
+	
+	return 0;
+}
+</r:code>
+
+<h2>Ввод и вывод для свойств</h2>
+
+Для того, чтобы корректно работать с вводом и выводом для свойств, я добавил две шаблонные функции, позволяющие записывать свойства в поток и читать их оттуда. Все это работает, если тип свойства можно писать в поток или читать из него.
+<r:code class="cpp">
+template <
+	typename PropertyOwner,
+	typename PropertyType,	
+	PropertyType (PropertyOwner::*getter)(),
+	void (PropertyOwner::*setter)(PropertyType) >
+std::ostream & operator << ( std::ostream & os, property<PropertyOwner,PropertyType,getter,setter> prop ) {
+	return os << (PropertyType)prop;
+}
+
+template <
+	typename PropertyOwner,
+	typename PropertyType,	
+	PropertyType (PropertyOwner::*getter)(),
+	void (PropertyOwner::*setter)(PropertyType) >
+std::istream & operator >> ( std::istream & is, property<PropertyOwner,PropertyType,getter,setter> prop ) {
+	PropertyType value;
+	is >> value;	
+	prop = value;	
+	return is;
+}
+</r:code>
+
+<h2>Ссылки</h2>
+<ul>
+<li><a href="http://dask-blog.blogspot.com/2008/05/property-c.html" rel="nofollow">http://dask-blog.blogspot.com/2008/05/property-c.html</a></li>
+<li><a href="http://www.rsdn.ru/article/vcpp/props.xml" rel="nofollow">Статья на RSDN, которая послужила отправной точкой реализации</a></li>
+</ul>

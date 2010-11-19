@@ -1,0 +1,123 @@
+Для того, чтобы использовать библиотеку необходимо подключить один заголовочный файл. Библиотека находится в пространстве имен boost::xpressive.
+<r:code class="cpp">
+#include <boost/xpressive/xpressive.hpp>
+
+using namespace boost::xpressive;
+</r:code>
+
+Сразу стоит отметить проблему, которая может возникнуть при использовании библиотеки:
+Когда я попытался скомпилировать примеры для версии 1.34 компилятором GCC 4.3, то получил набор достаточно невнятных ошибок вида:
+<r:code>
+In file included from /usr/include/boost/xpressive/detail/dynamic/matchable.hpp:21,
+                 from /usr/include/boost/xpressive/detail/core/linker.hpp:27,
+                 from /usr/include/boost/xpressive/detail/core/icase.hpp:14,
+                 from /usr/include/boost/xpressive/regex_primitives.hpp:17,
+...
+.../core/state.hpp:34: error: changes meaning of ‘match_context’ from ‘struct boost::xpressive::detail::match_context<BidiIter>’
+...
+In file included from /usr/include/boost/xpressive/detail/static/productions/charset_transforms.hpp:18,
+                 from /usr/include/boost/xpressive/detail/static/productions/complement_compiler.hpp:19,
+...
+.../chset/basic_chset.hpp:28: error: changes meaning of ‘basic_chset’ from ‘struct boost::xpressive::detail::basic_chset<typename Traits::char_type>’
+</r:code>
+
+Причина оказалась в несовместимости версии 1.34 и GCC 4.3. В результате, примеры я собирал с помощью GCC 4.2. В 4.1 все тоже работает. Других проблем при работе с блиотекой у меня не возникло.
+
+<h2>Динамические регулярные выражения</h2>
+
+Динамические регулярные выражения описываются и используются практически также, как и в <a href="http://blog.alno.name/2008/10/using-boost-regex/">Boost::Regex</a>. Здесь я опишу только отличия:
+<ul>
+	<li>Регулярное выражение из строки создается не конструктором, а с помощью специальной функции <b>sregex::compile</b></li>
+	<li>Отсутствуют некоторые функции класса basic_regex: те, которые позволяют рассматривать выражение как строку, и те, которые относятся к компиляции выражения (они перенесены в класс regex_compiler)</li>
+</ul>
+
+Более полный список отличий можно найти <a href="http://www.boost.org/doc/libs/1_35_0/doc/html/xpressive/appendices.html#boost_xpressive.appendices.appendix_3__differences_from_boost_regex" rel="nofollow">в соответствующем разделе документации к библиотеке</a>.
+
+На практике, скорее всего, придется столкнуться только с первым ограничением. Итак, учитывая его пример с проверкой e-mail, приведенный в статье про Boost::Regex выглядит следующим образом:
+<r:code class="cpp">
+#include <boost/xpressive/xpressive.hpp>
+
+#include <string>
+#include <iostream>
+
+using namespace boost::xpressive;
+
+bool can_be_email( const std::string & s ) {
+        static const sregex e = sregex::compile( "[a-zA-Z0-9_\\.]+@([a-zA-Z0-9]+\\.)+[a-zA-Z]{2,4}" );
+        return regex_match( s, e );
+}
+</r:code>
+
+Как можно увидеть, все изменения - заголовочные файлы, пространства имен и использование sregex::compile.
+
+<h2>Статические регулярные выражения</h2>
+Особенностью данной библиотеки является возможность описывать статические регулярные выражения, которые описываются прямо в C++ коде. Этот подход имеет некоторые преимущества:
+<ul>
+	<li>Проверка синтаксиса регулярных выражений на этапе компиляци;</li>
+	<li>Возможность использовния данных и кода C++, в том числе других регулярных выражений;</li>
+	<li>Статический код лучше встраивается и оптимизируется;</li>
+	<li>В принципе, возможно определение регулярных выржений нне только над строками, но и, например, над массивами чисел.</li>
+</ul>
+
+Для того, чтобы статически определить регулярное выражение необходимо присвоить переменной типа basic_regex<>(sregex, cgerex и т.п.) значение некоторого выражения, записываемого следующим образом:
+<r:code class="cpp">
+sregex re1 = '$' >> +_d >> '.' >> _d >> _d;
+sregex re2 = +( _d | _w );
+</r:code>
+
+То есть по сути, записью регулярного выражения в виде C++ кода.
+При этом, допустимы следующие конструкции:
+
+<ul>
+	<li><b>_</b> - произвольный символ (аналог .)</li>
+	<li><b>a &gt;&gt; b</b> - последовательность (аналог ab)</li>
+	<li><b>a | b</b> - альтернатива</li>
+	<li><b>(s1= a)</b> - группировка (аналог (a))</li>
+	<li><b>*a,+a,!a</b> - проивзольное число повторений a, больше 0, 0 или 1,не a (a*,a+,a?)</li>
+	<li><b>repeat&lt;n,m&gt;(a)</b> - от n до m повторений a (a{n,m})</li>
+	<li><b>_w</b> - буква (\w)</li>
+	<li><b>_d</b> - цифра (\d)</li>
+	<li><b>_s</b> - пробельный символ (\s)</li>
+</ul>
+
+Полный список можно найти <a href="http://www.boost.org/doc/libs/1_36_0/doc/html/xpressive/user_s_guide.html#boost_xpressive.user_s_guide.creating_a_regex_object.static_regexes.static_xpressive_syntax_cheat_sheet" rel="nofollow">здесь</a>.
+
+Теперь, попробуем описать тот же самый пример (e-mail) в виде статического регулярного выражения:
+<r:code class="cpp">
+#include <boost/xpressive/xpressive.hpp>
+
+#include <string>
+#include <iostream>
+
+using namespace boost::xpressive;
+
+bool can_be_email( const std::string & s ) {
+	// static const sregex e = sregex::compile( "[a-zA-Z0-9_\\.]+@([a-zA-Z0-9]+\\.)+[a-zA-Z]{2,4}" );
+        static const sregex e = +(_w|_d|'.') >> '@' >> +( +(_w|_d) >> '.' ) >> repeat<2,4>(_w);
+        return regex_match( s, e );
+}
+</r:code>
+
+Таким образом, регулярное выражение достаточно просто переписывается в C++ нотации. 
+
+P.S. Если Вам в принципе нравится идея описания в C++ коде грамматик, то стоит посмотреть также в сторону библиотеки <a href="http://blog.alno.name/2008/09/parsers-in-cpp-with-boost-spirit/">Boost::Spirit</a>, которая предназначена для описания парсеров в очень сходной нотации.
+
+В документации <a href="http://www.boost.org/doc/libs/1_35_0/doc/html/xpressive/appendices.html#boost_xpressive.appendices.perf" rel="nofollow">приведены таблицы сравнения производительности</a> Boost::Xpressive со статическими и динамическими регулярными выражениями и Boost::Regex.
+
+<h2>Использование уже описанных регулярных выражений</h2>
+
+Одной из интересных возможностей статических регулярных выражений является использования уже описанных выше выражений. Например, наше регулярное выражения для проверки e-mail явно содержит в себе подвыражение для проверки имени домена. Значит, его можно выделить в отдельную сущность и затем использовать повторно!
+
+С использованием Boost::Xpressive это делается совсем просто:
+
+<r:code class="cpp">
+bool can_be_email( const std::string & s ) {
+        static const sregex name = +(_w|_d|'.'); // Вот это вот регулярное выражение на имя ящика
+        static const sregex domain = +( +(_w|_d) >> '.' ) >> repeat<2,4>(_w); // А это на домен
+        static const sregex email = name >> '@' >> domain; // А вместе - на e-mail
+
+        return regex_match( s, email );
+}
+</r:code>
+
+Окромя вышеописанных, Boost::Xpressive содержит еще уйму возможностей, таких как таблицы символов, семантические действия и т.п. К сожалению, здесь я их описывать не буду (может быть что-нибудь в другой заметке =) ), так что интересующимся предлагаю почитать документацию к библиотеке.

@@ -1,0 +1,16 @@
+<a href="http://robocode.sourceforge.net/" rel="nofollow">Robocode</a> - это игра, придуманная Mathew Nelson в компании IBM, предназначенная для обучения программированию на языке <a href="http://blog.alno.name/cats/java/">Java</a>.
+
+Суть игры проста: игроки пишут код на <strong>Java</strong>, управляющий действиями миниатюрного танка. Потом несколько танков выпускаются на поле и бьются до победного конца) По результатам нескольких раундов определяется победитель.
+
+Обычно, соревнования проводятся в стиле deathmatch, то есть каждый танк представляет одну команду, но игра поддерживает и возможность командной игры, когда за одну команду играют несколько танков, возможно, кооперирующихся.
+
+В ближайшее время попробую поиграться)) Так что, если у кого будет желание сразиться с моими танками - с удовольствием приму вызов=)
+
+<strong>Ссылки:</strong>
+<ul>
+	<li><a href="http://robocode.sourceforge.net/" rel="nofollow">Офсайт проекта (En)</a></li>
+	<li><a href="http://robocode.sourceforge.net/docs/robocode/" rel="nofollow">API Robocode (En)</a></li>
+	<li><a href="http://robowiki.net/cgi-bin/robowiki" rel="nofollow">RoboWiki (En)</a></li>
+	<li><a href="http://robocoderepository.com/" rel="nofollow">Репозиторий роботов (En)</a></li>
+	<li><a href="http://grigory.wordpress.com/2007/06/12/robocode/" rel="nofollow">Пост о Robocode в блоге Grigory (Ru)</a></li>
+</ul>

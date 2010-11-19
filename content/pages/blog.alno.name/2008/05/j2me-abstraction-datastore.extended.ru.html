@@ -1,0 +1,130 @@
+<h2>Storable</h2>
+
+Интерфейс хранимого объекта содержит три метода:
+<ul>
+<li><b>save(DataOutput)</b> - сохранить объект в поток;</li>
+<li><b>load(DataInput)</b> - загрузить объект из потока;</li>
+<li><b>clear()</b> - очистить состояние объекта, вызывается в случае, если источник данных отсутствует.</li>
+</ul>
+
+<r:code class="java">
+package org.alnomm.storage;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+
+/**
+ * Интерфейс объекта, который может быть сохранен и загружен
+ * 
+ * @author alno
+ */
+public interface Storable {
+
+	/**
+	 * Сохранить объект в поток
+	 * 
+	 * @param os
+	 *            поток вывода данных
+	 * @throws Exception
+	 *             в случае ошибки
+	 */
+	public void save( DataOutput os ) throws Exception;
+
+	/**
+	 * Загрузить объект из потока
+	 * 
+	 * @param os
+	 *            поток ввода данных
+	 * @throws Exception
+	 *             в случае ошибки
+	 */
+	public void load( DataInput is ) throws Exception;
+	
+	/**
+	 * Очистить объект
+	 */
+	public void clear();
+}
+</r:code>
+
+<h2>Хранилище</h2>
+Хранилище  - объект, отвечающий за сохранение и восстановление хранимых объектов. Для возможности доступа из произвольной точки программы, хранилище реализует паттерн синглтон.
+Также, хранилище исполняет обязанности по выбору необходимой реализации, т.е. работает как абстрактная фабрика.
+
+Несколько слов о выборе реализации:
+<ul>
+<li>Для того, чтобы класс ненужной реализации не загружался вообще, загрузка реализации происходит по имени класса, через механизм <b>Reflection</b>.</li>
+<li>Для проверки поддержки JSR-75 производится попытка загрузки класса <b>FileConnection</b>, и если она успешна, то используется реализация на основе файловой системы, иначе на основе RecordStore.</li>
+</ul>
+
+<r:code class="java">
+package org.alnomm.storage;
+
+public abstract class Storage {
+
+	private static Storage instance = null;
+
+	/**
+	 * Получить экземпляр хранилища
+	 * 
+	 * @return экземпляр хранилища
+	 * @throws Exception
+	 *             если произошла ошибка
+	 */
+	public static Storage instance() throws Exception {
+		if ( instance == null ) {
+
+			String className = "org.alnomm.storage.RecordStorage"; // По умолчанию храним данные в RecordStore
+
+			if ( hasFilesystem() ) // Если есть файловая система, то загружаем другое хранилище
+				className = "org.alnomm.storage.FileStorage";
+
+			instance = (Storage) Class.forName( className ).newInstance();
+		}
+
+		return instance;
+	}
+
+	/**
+	 * Сохранить объект
+	 * 
+	 * @param obj
+	 *            объект
+	 * @throws Exception
+	 *             если произошла ошибка
+	 */
+	public abstract void save( Storable obj ) throws Exception;
+
+	/**
+	 * Сохранить объект
+	 * 
+	 * @param obj
+	 *            объект
+	 * @throws Exception
+	 *             если произошла ошибка
+	 */
+	public abstract void load( Storable obj ) throws Exception;
+
+	/**
+	 * Проверить, поддерживает ли телефон операции с ФС
+	 * 
+	 * @return
+	 */
+	private static boolean hasFilesystem() {
+		try {
+			Class.forName( "javax.microedition.io.file.FileConnection" ); // Проверяем, можем ли загругить класс
+			return true;
+		} catch ( Exception e ) {
+			return false;
+		}
+	}
+}
+</r:code>
+
+<h2>Ссылки</h2>
+<ul>
+<li><a href="http://developers.sun.com/mobility/apis/articles/fileconnection/">Статья об использовании FileConnection</a></li>
+</ul>
+
+<h2>PS</h2>
+На последок, хотелось бы задать вопрос: какие еще возможные методы хранения данных в J2ME могут быть реализованы?

@@ -1,0 +1,5 @@
+title: "Умные указатели в C++: boost::shared_ptr, boost::weak_ptr, boost::intrusive_ptr"
+description: "Статья оби использовании умных указателей библиотеки Boost: shared_ptr, weak_ptr, scoped_ptr. Использованиеу указателей нам массивы."
+keywords: "boost, c++, weak_ptr, shared_ptr, scoped_ptr, scoped_array, shared_array, умные указатели, smart pointers, слабый указатель, разделяемый указатель"
+layout: blog_entry
+published_at: 2008-05-14T10:38:00+00:00

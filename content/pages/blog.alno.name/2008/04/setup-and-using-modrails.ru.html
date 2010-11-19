@@ -1,0 +1,20 @@
+<p><strong>mod_rails</strong> (также известен как <strong>Phusion Passenger</strong>) - модуль для Apache, позволяющий осуществлять максимально простое размещение Rails-приложений. Установка модуля занимает буквально несколько минут, после этого приложение может быть размещено практически без осуществления какой-либо настройки Apache, буквально одной строчкой конфигурации.</p>
+
+<h2>Установка</h2>
+<p>Самый простой способ установки mod_rails - через использование<strong> Ruby Gems</strong>. Для установки необходимо выполнить из под рута две команды:
+
+<r:code class="bash">gem install passenger
+passenger-install-apache2-module
+</r:code>
+
+И далее следовать инструкциям интерактивной программы инсталляции.</p>
+
+<h2>Размещение приложения</h2>
+
+<p>Для размещения приложения достаточно в конфигурационном файле Apache создать виртуальный хост и указать в качестве <strong>DocumentRoot</strong> директорию <strong>public</strong> Rails-приложения. Например:
+
+<r:code class="apache">&lt;VirtualHost *:80&gt;
+ServerName www.mycook.com
+DocumentRoot /webapps/mycook/public
+&lt;/VirtualHost&gt;
+</r:code></p>

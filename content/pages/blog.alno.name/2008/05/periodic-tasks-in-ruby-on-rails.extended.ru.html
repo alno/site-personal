@@ -1,0 +1,98 @@
+<h2>Установка BackgrounDrb</h2>
+
+Сначала необходимо установить требуемые гемы:
+
+<r:code class="bash">
+sudo gem install chronic packet # Устанавливаем требуемые гемы
+
+script/plugin install http://svn.devjavu.com/backgroundrb/trunk # Устанавливаем плагин
+
+rake backgroundrb:setup # Конфигурирем плагин
+</r:code>
+
+<h2>Конфигурация</h2>
+
+Конфигурирование осуществляется путем редактирования файла <i>config/backgroundrb.yaml</i>. Изначально, после установки он может выглядеть:
+<r:code class="yaml">
+:backgroundrb: 
+  :port: 11006
+  :ip: 0.0.0.0
+</r:code>
+
+В раздел <b>:backgroundrb:</b> можно добавлять различные опции, наиболее важными из которых являются:
+
+<ul>
+<li><b>environment</b> - какую среду Rails загружать (environment, test, production)</li>
+<li><b>port</b> - порт, котрый будет слушать демон</li>
+<li><b>ip</b> - адрес хоста, на котором будет работать демон</li>
+</ul>
+
+При реализации периодических задач единственное условие на хост и порт состоит в том, чтобы демон мог открыть сокет с этими параметрами. Разумеется, открывать его наружу несколько небезопасно.
+
+<h2>Создание периодической задачи</h2>
+
+Для создания новой периодической задачи необходимо выполнить несколько шагов:
+
+<ol><li>
+	Сгенерировать обработчик, вызвав:
+
+	<r:code class="bash">script/generate worker my_worker</r:code>
+
+	В результате в директорию lib/workers будет добавлен новый класс MyWorker:
+<r:code class="ruby">
+class MyWorker < BackgrounDRb::MetaWorker
+  set_worker_name :my_worker
+
+  def create(args = nil)
+    # this method is called, when worker is loaded for the first time
+  end
+end 
+</r:code>
+</li><li>
+	Опеределить в MyWorker метод, который будет выполнять задачу, например <i>do_something</i>
+</li><li>
+	В файле конфигурации добавить раздел <b>:schedules:</b>, и в него следующий код:
+
+<r:code class="yaml">
+  :my_worker:
+    :do_something:
+      :trigger_args: * */30 * * * *
+</r:code>
+
+	В <b>:trigger_args:</b> задается условие периодичности в виде cron-строки, в частности вышеприведенная запись означает: <i>каждые 30 минут вызывать метод <b>do_something</b> объекта <b>MyWorker</b></i>.
+
+	В качестве альтернативы, можно задать периодичность в виде:
+
+<r:code class="yaml">
+  :trigger_args:
+    :start: <%= Time.now + 5.seconds %>
+    :end: <%= Time.now + 10.minutes %>
+    :repeat_interval: <%= 1.minute %> 
+</r:code>
+
+В результате весь файл  <b>config/backgroundrb.yml</b> будет выглядеть приблизительно так:
+<r:code class="yaml">
+:backgroundrb: 
+  :port: 11006
+  :ip: 0.0.0.0
+  :environment: production
+:schedules:
+  :my_worker:
+    :do_something:
+      :trigger_args: * */30 * * * *
+</r:code>
+
+</li></ol>
+
+<h2>Запуск процесса</h2>
+
+Для запуска процесса как демона, используются команды <b>script/backgroundrb start</b> и <b>script/backgroundrb stop</b>.
+При вызове <i>script/backgroundrb</i> без параметров, процесс выполняется в терминале.
+
+<h2>Ссылки</h2>
+
+<ul>
+	<li><a href="http://backgroundrb.rubyforge.org/index.html">Офсайт проекта (En)</a></li>
+	<li><a href="http://gnufied.org/2008/02/12/backgroundrb-best-practises/">Best practises (En)</a></li>
+	<li><a href="http://warpspire.com/tipsresources/programming/long-running-tasks-in-rails-backgroundrb/">Статья об использовании BackgrounDrb, но несколько устаревшая (En)</a></li>
+</ul>

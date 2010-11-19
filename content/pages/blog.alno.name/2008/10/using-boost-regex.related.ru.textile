@@ -1,0 +1,3 @@
+* "Регулярные выражения с использованием Boost::Xpressive":http://blog.alno.name/2008/12/using-boost-xpressive/
+* "Создание парсеров на C++ с помощью Boost::Spirit":http://blog.alno.name/2008/09/parsers-in-cpp-with-boost-spirit/
+* "Использование грамматик, функций и замыканий в Boost::Spirit":http://blog.alno.name/2008/12/advanced-boost-spirit/

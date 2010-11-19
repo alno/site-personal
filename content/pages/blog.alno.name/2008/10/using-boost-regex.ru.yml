@@ -1,0 +1,5 @@
+title: "Регулярные выражения в С++: использование Boost::Regex"
+description: "Использование регулярных выражений в C++ с использованием библиотеки Boost.Regex. В качестве примера рассматривается проверка e-mail."
+keywords: "регулярные выражения, regular expressions, c++, boost, regex, regexp, match, regex_match, regex_search, regex_replace, регулярные выражения c++"
+layout: blog_entry
+published_at: 2008-10-12T06:41:00+00:00

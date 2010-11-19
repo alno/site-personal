@@ -1,0 +1,5 @@
+title: "Периодические задачи в Ruby On Rails"
+description: "Реализация периодических задач в приложениях на Ruby on Rails"
+keywords: "ruby, rails, periodic, периодические задачи, backgroundrb, drb"
+layout: blog_entry
+published_at: 2008-05-30T11:54:00+00:00

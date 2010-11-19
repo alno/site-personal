@@ -1,0 +1,5 @@
+title: "Установка и использование mod_rails (Passenger)"
+description: "Описание процесса установки и настройки Apache-модуля для поддержки Rails-приложений"
+keywords: "apache, mod_rails, passenger, rails"
+layout: blog_entry
+published_at: 2008-04-15T00:00:00+00:00

@@ -1,0 +1,97 @@
+Сразу стоит отметить, что в отличие от многих других компонентов Boost, этот компонент содержит является скопилированным, и потому требует связывания с соответствующей библиотекой. В частности, для компилятора GCC необходимо при связывании добавлять флаг -lboost_regex.
+
+<h2>Простейшее использование</h2>
+
+Для того, чтобы определить регулярное выражение для дальнейшего использования, достаточно объявить переменную типа boost::regexp и передать в конструктор текст регялрного выражения. Например:
+<r:code class="cpp">
+boost::regexp exp("(\\d{4}[- ]){3}\\d{4}");
+</r:code>
+
+Для того, чтобы обрабатывать регулярные выражения Boost предоставляет три основных функции:
+<ul>
+	<li><b>regex_match</b> - проверка сопоставления выражения строке;</li>
+	<li><b>regex_search</b> - поиск сопоставлений выражения в строке;</li>
+	<li><b>regex_replace</b> - замена сопоставлений выражения в строке на заданную подстроку.</li>
+</ul>
+
+В простейшем случае, эти функции используются следующим образом:
+<r:code class="cpp">
+bool r1 = boost::regex_match( "what", exp );
+bool r2 = boost::regex_search( "where", exp );
+std::string r3 = boost::regex_replace( "what", exp, "to" );
+</r:code>
+
+<h2>Получение результатов сопоставлений</h2>
+
+Однако, в функциях <i>regex_match</i> и <i>regex_search</i> часто требуется извлекать дополнительную информацию о сопоставлении. Для этого используются объекты типа <b>boost::match_results&lt;IterType&gt;</b>. Сам match_results является шаблоном, который в качестве аргумента принимает тип итератора для сопоставляемых символов. Однако, использовать его напрямую совсем не обязательно. Boost предоставляет 4 типа, представляющих уже параметризованные варианты match_results: 
+
+<r:code class="cpp">
+namespace boost {
+typedef match_results<const char*>                  cmatch; // Используется при сопоставлении C-строк
+typedef match_results<const wchar_t*>               wcmatch; // Используется при сопоставлении С-строк в Unicode
+typedef match_results<std::string::const_iterator>  smatch; // Используется при сопоставлении STL-строк
+typedef match_results<std::wstring::const_iterator> wsmatch; // Используется при сопоставлении STL-строк в Unicode
+}
+</r:code>
+
+<b>match_results</b> содержит следующие методы и операторы для работы с результатами сопоставлений:
+<ul>
+	<li><b>size()</b> - количество групп сопоставлений;</li>
+	<li><b>suffix(), prefix()</b> - информация о префиксе и суффиксе сопоставления;</li>
+	<li><b>[i]</b> - информация об i-й группе сопоставления.</li>
+</ul>
+
+При этом, "информация о" - это объект имеющий следующие поля:
+<ul>
+	<li><b>first</b> - итератор, указывающий на начало группы сопоставдления;</li>
+	<li><b>second</b> - итератор, указывающий на конец группы сопоставдления;</li>
+	<li><b>matched</b> - булево поле, равное true если группа была сопоставлена.</li>
+</ul>
+
+Для получения результатов сопоставления используются варианты функций, принимающие дополнительный аргумент. Например:
+<r:code class="cpp">
+boost::cmatch m;
+
+if ( boost::regexp_match( "what", m, exp ) ) {
+	int sz = m.size(); // Количество групп сопоставления
+	for ( int i = 0; i < sz; ++ i )
+		std::cout << std::string( m[i].first, m[i].second ) << std::endl;
+}
+
+while ( boost::regexp_search( "waht", m, exp ) ) {
+	...
+}
+</r:code>
+
+<h2>Примеры</h2>
+
+В качестве первого примера, рассмотрим функцию на C++, которая проверяет, может ли заданная строка являться корректным адресом электронной почты:
+<r:code class="cpp">
+#include <string>
+
+#include <boost/regex.hpp>
+
+bool can_be_email( const std::string & s ) {
+        static const boost::regex e("[a-zA-Z0-9_\\.]+@([a-zA-Z0-9]+\\.)+[a-zA-Z]{2,4}");
+        return boost::regex_match( s, e );
+}
+</r:code>
+
+Второй пример: извлечение из e-mail имени ящика и домена:
+<r:code class="cpp">
+#include <string>
+#include <stdexcept>
+
+#include <boost/regex.hpp>
+
+std::pair<std::string,std::string> split_email(  const std::string & s ) {
+	static const boost::regex e("([a-zA-Z0-9_\\.]+)@(([a-zA-Z0-9]+\\.)+[a-zA-Z]{2,4})");
+	
+	boost::smatch m;
+	if ( boost::regex_match( s, m, e ) ) {
+		return std::make_pair( std::string( m[1].first, m[1].second ), std::string( m[2].first, m[2].second ) );
+	} else {
+		throw std::runtime_error( "Bad email" );
+	}
+}
+</r:code>

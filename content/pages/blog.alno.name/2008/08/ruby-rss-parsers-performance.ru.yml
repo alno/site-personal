@@ -1,0 +1,7 @@
+title: "Производительность RSS парсеров для Ruby"
+description: ""
+keywords: "rss, parsers, ruby, performance, feedtools, syndication, feednormalizer, производительность, новости, парсер"
+layout: blog_entry
+published_at: 2008-08-07T11:28:00+00:00
+images:
+  - ruby-rss-parsers/performance.png

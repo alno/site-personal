@@ -1,0 +1,2 @@
+* "Использование контейнеров для указателей Boost Pointer Container Library":http://blog.alno.name/2009/04/using-boost-ptr-containers/
+* "Использование контейнеров boost::multi_index":http://blog.alno.name/2008/04/using-boost-multi-index/

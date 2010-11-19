@@ -1,0 +1,5 @@
+title: "Boost::Spirit: Грамматики, функции и замыкания"
+description: "Описание продвинутых возможностей использования Boost::Spirit: грамматики, лямбда-выражения, функции и замыкания."
+keywords: "c++, boost, spirit, closures, functions, phoenix, lambda, parsing, парсинг, грамматика, как написать парсер на c++"
+layout: blog_entry
+published_at: 2008-12-28T07:46:00+00:00

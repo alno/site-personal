@@ -1,0 +1,7 @@
+title: "Использование boost::multi_index"
+description: "Использование multi_index контейнеров библиотеки Boost"
+keywords: "c++, boost, multi_index, container, hash map, хэш, bidirectional map"
+layout: blog_entry
+published_at: 2008-04-08T15:36:06+00:00
+images:
+  - boost/multi-index.png

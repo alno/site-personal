@@ -1,0 +1,2 @@
+* "Умные указатели в C++: boost::shared_ptr, boost::weak_ptr, boost::intrusive_ptr":http://blog.alno.name/2008/05/using-boost-smart-pointers/
+* "Использование контейнеров для указателей Boost Pointer Container Library":http://blog.alno.name/2009/04/using-boost-ptr-containers/

@@ -1,0 +1,120 @@
+На Java:
+<r:code class="java">
+class SomeClass {
+
+	public void doSomething( Object o ) {
+		System.out.println( "Object" );
+	}
+
+	public void doSomething( String s ) {
+		System.out.println( "String" );
+	}
+}
+....
+SomeClass someObject = ...
+....
+Object a1 = new Integer(1);
+Object a2 = new String("str");
+
+someObject.doSomething( a1 ); // Вызывается первый метод
+someObject.doSomething( a2 ); // Вызывается первый метод, статический тип a2 - Object
+</r:code>
+В результате выполнения этого кода, на консоль будет выведены две строки "Object".
+
+Теперь, похожий код на Groovy:
+<r:code class="groovy">
+class SomeClass {
+	def doSomething( Object o ) {
+		println 'Object'
+	}
+
+	def doSomething( String o ) {
+		println 'String'
+	}
+}
+....
+SomeClass someObject = ...
+....
+Object a1 = new Integer(1);
+Object a2 = new String("str");
+
+someObject.doSomething( a1 ); // Вызывается первый метод
+someObject.doSomething( a2 ); // Вызывается второй метод, динамический тип a2 - String
+</r:code>
+В результате выполнения этого кода, на консоль будет выведены две строки: "Object" и "String"
+
+<h2>Примеры использования мультиметодов</h2>
+Здесь я рассмотрю парочку более-менее приближенных к реальности примеров, когда вышеописанная особенность может действительно облегчить жизнь.
+
+<h3>Обработка взаимодействий объектов</h3>
+Классический пример использования мультиметодов - обработка взаимодействия различных объектов. Например, у нас есть базовый класс <b>SpaceObject</b> и его различные наследники: <b>SpaceShip</b>, <b>Asteroid</b>, <b>Rocket</b>.
+
+Объекты могут сталкиваться. При столкновении, должен вызываться метод <b>collide</b> одного, объекта, у которого тип аргумента - тип второго объекта. В частности, на Groovy, реализация выглядит просто:
+<r:code class="groovy">
+class Asteroid implements SpaceObject {
+	def collide( Asteroid other ) {
+		// Столкновение астероид - астероид
+	}
+
+	def collide( SpaceShip other ) {
+		// Столкновение астероид - корабль
+	}
+
+	def collide( Rocket other ) {
+		// Столкновение астероид - ракета
+	}
+}
+</r:code>
+Аналогично, определив столкновения для остальных типов объектов, можно просто писать следующий код, не заботясь о статических типах аргументов:
+
+<r:code class="groovy">
+SpaceObject o1 = ...
+SpaceObject o2 = ...
+
+o1.collide( o2 );
+</r:code>
+
+В языках, использующих статическую типизацию, например, Java или C++, для реализации подобного поведения необходимо писать в каждом объекте метод-заглушку, который принимает произвольный объект и осуществляет диспетчеризацию. Для этого используется проверка типа во время выполнения (<b>dynamic_cast</b> в C++ и <b>instanceof</b> в Java) или же, если взаимодействие коммутативно, вызовом виртуальной функции аргумента.
+
+<h3>Сравнение объектов на равенство</h3>
+Более часто встречающаяся задача - проверка равенства объектов. Например, метод equals в Java. Обычно его определение выглядит следующим образом:
+<r:code class="java">
+class SomeClass {
+	public boolean equals( Object other ) {
+		if ( other == null ) return false;
+		if ( !(other instanceof SomeClass) ) return false; // Проверяем класс объекта
+
+		SomeClass o = (SomeClass)other; // Преобразуем объект к нужному классу
+
+		... // Собственно, сравнение объектов
+	}
+}
+</r:code>
+Безусловно, эти лишние три строки в каждом классе не увеличивают читабельность кода. Теперь посмотрим, как это может быть написано на Groovy с учетом мультиметодов.
+<r:code class="groovy">
+class SomeClass {
+	boolean equals( SomeClass other ) {
+		... // Собственно, сравнение объектов
+	}
+}
+</r:code>
+Никаких лишних преобразований! Все дело в том, что этот метод будет вызван в случае, если аргумент имеет подходящий динамический тип. В остальных случаях будет вызвана реализация по умолчанию из класса Object, которая вернет false.
+
+<h2>Также, на схожие темы</h2>
+
+<ul>
+	<li><a href="http://blog.alno.name/2008/06/using-groovy/">Использование Groovy</a></li>
+	<li><a href="http://blog.alno.name/2008/06/using-groovy-2/">Замыкания и динамические объекты в Groovy</a></li>
+</ul>
+
+<h2>Ссылки</h2>
+
+<ul>
+	<li><a href="http://ru.wikipedia.org/wiki/%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%BC%D0%B5%D1%82%D0%BE%D0%B4">Статья о мультиметодах в Википедии (Ru)</a></li>
+	<li><a href="http://alenacpp.blogspot.com/2007/05/blog-post.html">Пост о мультиметодах в блоге AlenaC++ (Ru)</a></li>
+	<li><a href="http://ogolberg.livejournal.com/44025.html">Пост о мультиметодах в журнале Odolberg (Ru)</a></li>
+	<li><a href="http://www.rsdn.ru/article/cpp/multimethods.xml">Статья на RSDN о мультиметодах в C++</a></li>
+	<li><a href="http://en.wikipedia.org/wiki/Multiple_dispatch">Статья о мультиметодах в Википедии (En)</a></li>
+	<li><a href="http://shemnon.com/speling/2007/05/groovy-and-dynamic-dispatchmul.html">Пост в блоге Shemnon (En)</a></li>
+	<li><a href="http://blogs.sun.com/sundararajan/entry/multimethods_in_groovy">Пост в блоге Sundararajan (En)</a></li>
+</ul>
