@@ -30,6 +30,20 @@
             </r:find>
         </ul>
     </li>
+	
+	<li class="widget">
+        <h2 class="widgettitle">Архив записей</h2>
+        <ul class="archive">
+            <r:find url="/">
+                <r:children:each by="year" order="desc" limit="10"><li>
+					<a href="<r:url />"><r:value name="year" /></a>
+                    <ul class="archive">
+                    	<r:children:each by="month" order="desc" limit="10"><li><a href="<r:url />"><r:value name="month" /></a></li></r:children:each>
+                    </ul> 
+                </li></r:children:each>
+            </r:find>
+        </ul>
+    </li>
 
     <li id="tag_cloud" class="widget widget_tag_cloud">
         <h2 class="widgettitle">Метки</h2>

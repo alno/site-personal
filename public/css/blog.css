@@ -328,6 +328,13 @@ list-style-type:none;
 #sidebar li {
 line-height:1.5em;
 }
+#sidebar ul.archive {
+	list-style-type: circle;
+	list-style-position: inside;
+}
+#sidebar ul.archive li {
+	padding-left:16px;
+}
 #sidebar ul li ul.children li {
 background:transparent url(images/children.gif) no-repeat scroll 0pt 0pt;
 padding-left:16px;
