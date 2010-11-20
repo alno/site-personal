@@ -1,4 +1,6 @@
 .project
 .loadpath
 .settings
+.bundle
 cache
+tmp
