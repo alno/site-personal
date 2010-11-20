@@ -7,6 +7,13 @@ GIT
       radius
       sinatra (>= 1.1.0)
 
+GIT
+  remote: git://github.com/jlong/radius.git
+  revision: 17972eeaa0b913c44881b598d3133c9d90410e6f
+  tag: external-namespace-parse-fix
+  specs:
+    radius (0.7.0.prerelease)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -16,7 +23,6 @@ GEM
       abstract (>= 1.0.0)
     rack (1.2.1)
     rack-rewrite (1.0.2)
-    radius (0.6.1)
     sinatra (1.1.0)
       rack (~> 1.1)
       tilt (~> 1.1)
@@ -28,4 +34,5 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   rack-rewrite (~> 1.0.0)
+  radius!
   rayo!
