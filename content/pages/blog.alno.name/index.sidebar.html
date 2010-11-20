@@ -38,14 +38,14 @@
                 <r:children:each by="year" order="desc" limit="10"><li>
 					<a href="<r:url />"><r:value name="year" /></a>
                     <ul class="archive">
-                    	<r:children:each by="month" order="desc" limit="10"><li><a href="<r:url />"><r:value name="month" /></a></li></r:children:each>
+						<r:children:each by="month" order="desc" limit="10"><li><a href="<r:url />"><r:month><r:value name="month" /></r:month></a></li></r:children:each>
                     </ul> 
                 </li></r:children:each>
             </r:find>
         </ul>
     </li>
 
-    <li id="tag_cloud" class="widget widget_tag_cloud">
+    <!--<li id="tag_cloud" class="widget widget_tag_cloud">
         <h2 class="widgettitle">Метки</h2>
         <a href='http://blog.alno.name/tags/ai/' class='tag-link-28' title='1 тема' rel="tag" style='font-size: 8pt;'>AI</a>
         <a href='http://blog.alno.name/tags/antispam/' class='tag-link-25' title='3 темы' rel="tag" style='font-size: 11.5pt;'>Antispam</a>
@@ -86,7 +86,8 @@
         <a href='http://blog.alno.name/tags/swt/' class='tag-link-35' title='1 тема' rel="tag" style='font-size: 8pt;'>SWT</a>
         <a href='http://blog.alno.name/tags/tools/' class='tag-link-16' title='6 тем' rel="tag" style='font-size: 16.75pt;'>Tools</a>
         <a href='http://blog.alno.name/tags/web/' class='tag-link-6' title='3 темы' rel="tag" style='font-size: 11.5pt;'>Web</a>
-    </li>
+    </li>-->
+
     <li id="linkcat-10" class="widget widget_links">
         <h2 class="widgettitle">Блоги о C++</h2>
         <ul class='xoxo blogroll'>
@@ -110,6 +111,7 @@
             </li>
         </ul>
     </li>
+
     <li id="linkcat-18" class="widget widget_links">
         <h2 class="widgettitle">Блоги о Java</h2>
         <ul class='xoxo blogroll'>
@@ -124,6 +126,7 @@
             </li>
         </ul>
     </li>
+
     <li id="linkcat-13" class="widget widget_links">
         <h2 class="widgettitle">Блоги о Web</h2>
         <ul class='xoxo blogroll'>
@@ -141,6 +144,7 @@
             </li>
         </ul>
     </li>
+
     <li id="github-badge" class="widget widget_links">
     </li>
 </ol>
