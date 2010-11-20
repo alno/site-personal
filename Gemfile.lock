@@ -15,6 +15,7 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     rack (1.2.1)
+    rack-rewrite (1.0.2)
     radius (0.6.1)
     sinatra (1.1.0)
       rack (~> 1.1)
@@ -26,4 +27,5 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth
+  rack-rewrite (~> 1.0.0)
   rayo!
