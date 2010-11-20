@@ -1,0 +1,29 @@
+GIT
+  remote: git://github.com/alno/rayo.git
+  revision: d9d5f4b267183da8d97c148a8a2719ba1b575813
+  specs:
+    rayo (0.3.0)
+      erubis
+      radius
+      sinatra (>= 1.1.0)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    RedCloth (4.2.3)
+    abstract (1.0.0)
+    erubis (2.6.6)
+      abstract (>= 1.0.0)
+    rack (1.2.1)
+    radius (0.6.1)
+    sinatra (1.1.0)
+      rack (~> 1.1)
+      tilt (~> 1.1)
+    tilt (1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  RedCloth
+  rayo!
