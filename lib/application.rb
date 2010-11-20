@@ -9,6 +9,7 @@ class Application < Rayo::Application
 
   configure do |c|
     c.content_dir = File.join( File.dirname(__FILE__), '..', 'content' )
+    c.cache_dir = File.join( File.dirname(__FILE__), '..', 'cache' )
     c.languages = ['ru','en']
 
     c.add_filter 'textile' do |source|
