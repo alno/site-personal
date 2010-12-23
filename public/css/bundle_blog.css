@@ -12,7 +12,6 @@ tt{font-family:"Lucida Console","Courier New",Courier,monospace;font-size:1em;fo
 #menu ol li{float:left;}
 #menu ol li.first{margin-left:2em;}
 #menu ol li a{display:block;font-weight:bold;line-height:1.5em;margin:0;padding:.25em 1em .2em;text-align:center;text-transform:uppercase;}
-#menu ol li a:hover{background:transparent url(images/bg_menu.png) repeat-x scroll 0 50%;}
 #menu ol li ul{left:-999em;list-style-type:none;position:absolute;width:15em;}
 #menu ol li:hover ul,#menu ol li.sfhover ul{left:auto;}
 #menu ol li ul li a,#menu ol li ul li.current_page_item a{text-align:left;width:10em;}
