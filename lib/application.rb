@@ -19,8 +19,8 @@ class Application < Rayo::Application
     c.add_tags AuxTags
     c.add_tags ImagesTags
 
-    c.add_domain 'alno.name', /^(www\.)?alno\.name$/
-    c.add_domain 'blog.alno.name', /^(www.)?blog\.alno\.name$/
+    c.add_domain 'alno.name', /^(local\.|www\.)?alno\.name$/
+    c.add_domain 'blog.alno.name', /^(local\.www.)?blog\.alno\.name$/
 
     c.default_domain = 'blog.alno.name'
   end
