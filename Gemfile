@@ -9,3 +9,5 @@ gem 'rack-rewrite', '~> 1.0.0' # Rewrite engine
 
 # Textile support
 gem 'RedCloth', :require => 'redcloth'
+
+gem 'unicorn'
