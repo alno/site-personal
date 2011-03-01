@@ -8,7 +8,7 @@
 </p>
 
 <p>
-Installation: 
+Installation:
 
 <pre><code class="bash">gem install syntax</code></pre>
 
@@ -49,7 +49,7 @@ P.S: Before publication i found a <a href="http://rpheath.com/posts/356-github-t
 </p>
 
 <p>
-Installation: 
+Installation:
 
 <pre><code class="bash">gem install ultraviolet</code></pre>
 
@@ -82,7 +82,7 @@ Method arguments:
 <b>Project page</b>: <a href="http://coderay.rubychan.de/" rel="nofollow">http://coderay.rubychan.de/</a><br />
 <b>Supported languages</b>: Ruby, C, Delphi, HTML, RHTML (Rails), Nitro-XHTML, CSS, Diff, Java, JavaScript, JSON, YAML<br />
 <b>Advantages</b>: It's fastest gem in my <a href="http://blog.alno.name/2009/02/code-highlighters-ruby/en/#performance">performance measurements</a>. Also, it has a number of options, allowing to customize output.<br />
-<b>Drawbacks</b>: Built-in themes looks poor, especially for C and Java. 
+<b>Drawbacks</b>: Built-in themes looks poor, especially for C and Java.
 </p>
 
 <p>
