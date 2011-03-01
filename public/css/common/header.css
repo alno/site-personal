@@ -1,0 +1,22 @@
+#header {
+    color: white;
+    padding: 30px;
+    text-align: left;
+}
+
+#header h1 {
+    color: white;
+    font-size: 325%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#header h1 a:hover, #header h1 a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+#header dfn {
+    font-style: italic;
+    letter-spacing: 2px;
+}

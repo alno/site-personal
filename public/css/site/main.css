@@ -52,30 +52,12 @@ h3 {
 
 #header {
     background-color: #637E9F;
-    color: white;
     font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-    padding: 30px;
-    text-align: left;
 }
 
-#site-title {
-    color: white;
-    font-size: 325%;
-}
-
-#site-title a, #site-title a:visited {
+#header h1 a, #header h1 a:visited {
     color: white;
     text-decoration: none;
-}
-
-#site-title a:hover, #site-title a:hover {
-    color: white;
-    text-decoration: underline;
-}
-
-#site-subtitle {
-    font-style: italic;
-    letter-spacing: 2px;
 }
 
 #main {
@@ -175,102 +157,6 @@ h3 {
 
 #content img {
     vertical-align: middle;
-}
-
-#menu {
-    clear: both;
-    height: 1.9em;
-    padding: 0;
-    margin: 0;
-}
-
-#menu ol {
-    float: left;
-    list-style-type: none;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-
-#menu ol li {
-    float: left;
-    padding: 0;
-    margin: 0;
-}
-
-#menu ol li.first {
-    margin-left: 2em;
-}
-
-#menu ol li a {
-    display: block;
-    font-weight: bold;
-    line-height: 1.5em;
-    margin: 0pt;
-    padding: 0.25em 1em 0.2em;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-#menu ol li ul {
-    left: -999em;
-    list-style-type: none;
-    position: absolute;
-    width: 15em;
-}
-
-#menu ol li:hover ul, #menu ol li.sfhover ul {
-    left: auto;
-}
-
-#menu ol li ul li a, #menu ol li ul li.current_page_item a {
-    text-align: left;
-    width: 10em;
-}
-
-#menu {
-    background: #667088 none repeat scroll 0% 0%;
-}
-
-#menu ol li a {
-    background: #667088 none repeat scroll 0% 0%;
-    color: #CCCCCC;
-    text-decoration: none;
-}
-
-#menu ol li a:hover {
-    background-color: #505050;
-    color: #FFFFFF;
-}
-
-#menu ol li.current_page_item a {
-    background: #FFFFFF none repeat scroll 0% 0%;
-    color: #000000;
-}
-
-#menu ol li.current_page_item a:hover {
-    background: #EEEEEE none repeat scroll 0% 0% !important;
-    color: #000000;
-}
-
-#menu ol li ul li a {
-    background: #777777 none repeat scroll 0% 0% !important;
-    color: #CCCCCC;
-}
-
-#menu ol li ul li a:hover {
-    background: #777777 none repeat scroll 0% 0% !important;
-    color: #FFFFFF;
-}
-
-#menu ol li.current_page_item ul li a {
-    background: #EEEEEE none repeat scroll 0% 0% !important;
-    color: #000000;
-}
-
-#menu ol li.current_page_item ul li a:hover {
-    background: #EEEEEE none repeat scroll 0% 0% !important;
-    color: #000000;
 }
 
 .right {

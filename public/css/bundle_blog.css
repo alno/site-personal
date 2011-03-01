@@ -1,20 +1,30 @@
+#header{color:white;padding:30px;text-align:left;}
+#header h1{color:white;font-size:325%;margin-top:5px;margin-bottom:5px;}
+#header h1 a:hover,#header h1 a:hover{color:white;text-decoration:underline;}
+#header dfn{font-style:italic;letter-spacing:2px;}
+#menu{clear:both;height:1.95em;padding:0;margin:0;}
+#menu ol{float:left;list-style-type:none;width:100%;padding:0;margin:0;}
+#menu ol li{float:left;padding:0;margin:0;}
+#menu ol li.first{margin-left:2em;}
+#menu ol li a{display:block;font-weight:bold;line-height:1.5em;margin:0;padding:.25em 1em .2em;text-align:center;text-transform:uppercase;}
+#menu ol li ul{left:-999em;list-style-type:none;position:absolute;width:15em;}
+#menu ol li:hover ul,#menu ol li.sfhover ul{left:auto;}
+#menu ol li ul li a,#menu ol li ul li.current_page_item a{text-align:left;width:10em;}
+#menu{background:#667088 none repeat scroll 0 0;}
+#menu ol li a{background:#667088 none repeat scroll 0 0;color:#CCC;text-decoration:none;}
+#menu ol li a:hover{background-color:#505050;color:#FFF;}
+#menu ol li.current_page_item a{background:#FFF none repeat scroll 0 0;color:#000;}
+#menu ol li.current_page_item a:hover{background:#EEE none repeat scroll 0 0!important;color:#000;}
+#menu ol li ul li a{background:#777 none repeat scroll 0 0!important;color:#CCC;}
+#menu ol li ul li a:hover{background:#777 none repeat scroll 0 0!important;color:#FFF;}
+#menu ol li.current_page_item ul li a{background:#EEE none repeat scroll 0 0!important;color:#000;}
+#menu ol li.current_page_item ul li a:hover{background:#EEE none repeat scroll 0 0!important;color:#000;}
 *{margin:0;padding:0;}
 body{font-size:75%;line-height:normal;text-align:center;}
 a{text-decoration:none;}
 code,pre{-x-system-font:none;display:block;font-family:"Lucida Console","Courier New",Courier,monospace;font-size:1em;font-size-adjust:none;font-stretch:normal;font-style:normal;font-variant:normal;font-weight:normal;line-height:1.5em;padding:.5em;}
 tt{font-family:"Lucida Console","Courier New",Courier,monospace;font-size:1em;font-size-adjust:none;font-stretch:normal;font-style:normal;font-variant:normal;font-weight:normal;line-height:1.5em;padding:1px;background:#fafafa;border:1px solid #ccc;}
 #page{margin:1em auto;text-align:left;width:90%;height:auto;}
-#header{height:4em;padding:2em 2em 1em;}
-#header h1{float:left;font-size:2.5em;font-weight:bold;letter-spacing:-1px;line-height:1.5em;}
-#header dfn{float:right;margin:1.75em 0 0;text-align:right;width:49%;}
-#menu{clear:both;height:1.9em;}
-#menu ol{float:left;list-style-type:none;width:100%;}
-#menu ol li{float:left;}
-#menu ol li.first{margin-left:2em;}
-#menu ol li a{display:block;font-weight:bold;line-height:1.5em;margin:0;padding:.25em 1em .2em;text-align:center;text-transform:uppercase;}
-#menu ol li ul{left:-999em;list-style-type:none;position:absolute;width:15em;}
-#menu ol li:hover ul,#menu ol li.sfhover ul{left:auto;}
-#menu ol li ul li a,#menu ol li ul li.current_page_item a{text-align:left;width:10em;}
 #content{float:left;margin-left:1em;width:67%;padding:12px;}
 #content a{border-style:solid;border-width:0 0 1px;}
 #content blockquote{font-size:1.1em;font-style:italic;margin:1em 2em;}
