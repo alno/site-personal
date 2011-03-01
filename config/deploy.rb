@@ -20,7 +20,7 @@ after "deploy:update_code", :bundle_deps
 after "deploy:update_code", :copy_configs
 
 task :bundle_deps, roles => :app do
-  run "cd #{release_path} && #{bundle} --path ~/.gem --without development test"
+  run "cd #{release_path} && #{bundle} install --path ~/.gem --without development test"
 end
 
 task :copy_configs, roles => :app do
