@@ -31,6 +31,7 @@ GEM
     unicorn (3.3.1)
       kgio (~> 2.1)
       rack
+    xml-magic (0.1.1)
 
 PLATFORMS
   ruby
@@ -41,3 +42,4 @@ DEPENDENCIES
   radius!
   rayo!
   unicorn
+  xml-magic
