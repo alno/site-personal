@@ -4,3 +4,4 @@
 .bundle
 cache
 tmp
+config/flickr.yml

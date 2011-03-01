@@ -21,12 +21,16 @@ GEM
     abstract (1.0.0)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    kgio (2.1.1)
     rack (1.2.1)
     rack-rewrite (1.0.2)
     sinatra (1.1.0)
       rack (~> 1.1)
       tilt (~> 1.1)
     tilt (1.1)
+    unicorn (3.3.1)
+      kgio (~> 2.1)
+      rack
 
 PLATFORMS
   ruby
@@ -36,3 +40,4 @@ DEPENDENCIES
   rack-rewrite (~> 1.0.0)
   radius!
   rayo!
+  unicorn

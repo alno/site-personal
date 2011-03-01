@@ -2,6 +2,7 @@ require 'rayo'
 
 require 'lib/tags/images_tags.rb'
 require 'lib/tags/aux_tags.rb'
+require 'lib/tags/flickr_tags.rb'
 
 require 'redcloth'
 
@@ -18,11 +19,13 @@ class Application < Rayo::Application
 
     c.add_tags AuxTags
     c.add_tags ImagesTags
+    c.add_tags FlickrTags
 
     c.add_domain 'alno.name', /^(local\.|www\.)?alno\.name$/
-    c.add_domain 'blog.alno.name', /^(local\.www.)?blog\.alno\.name$/
+    c.add_domain 'blog.alno.name', /^(local\.|www\.)?blog\.alno\.name$/
+    c.add_domain 'degu.alno.name', /^(local\.|www\.)?degu\.alno\.name$/
 
-    c.default_domain = 'blog.alno.name'
+    c.default_domain = 'alno.name'
   end
 
   set :public, File.join( File.dirname(__FILE__), '..', 'public' )

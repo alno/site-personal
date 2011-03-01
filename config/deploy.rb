@@ -17,9 +17,14 @@ set :unicorn_conf, "/etc/unicorn/personal.alno.rb"
 set :unicorn_pid, "/var/run/unicorn/personal.alno.pid"
 
 after "deploy:update_code", :bundle_deps
+after "deploy:update_code", :copy_configs
 
 task :bundle_deps, roles => :app do
   run "cd #{release_path} && #{bundle} --path ~/.gem --without development test"
+end
+
+task :copy_configs, roles => :app do
+  run "cp #{deploy_to}/shared #{release_path}/config"
 end
 
 namespace :deploy do

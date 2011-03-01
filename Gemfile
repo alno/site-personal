@@ -10,4 +10,7 @@ gem 'rack-rewrite', '~> 1.0.0' # Rewrite engine
 # Textile support
 gem 'RedCloth', :require => 'redcloth'
 
+# Parsing Flickr API
+gem 'xml-magic'
+
 gem 'unicorn'
