@@ -24,7 +24,7 @@ task :bundle_deps, roles => :app do
 end
 
 task :copy_configs, roles => :app do
-  run "cp #{deploy_to}/shared #{release_path}/config"
+  run "cp #{deploy_to}/shared/flickr.yml #{release_path}/config"
 end
 
 namespace :deploy do
