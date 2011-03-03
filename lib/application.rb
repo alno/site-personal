@@ -1,4 +1,4 @@
-require '../rayo/lib/rayo'
+require 'rayo'
 
 require 'lib/tags/images_tags.rb'
 require 'lib/tags/aux_tags.rb'
