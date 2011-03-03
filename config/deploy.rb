@@ -25,6 +25,7 @@ end
 
 task :copy_configs, roles => :app do
   run "cp #{deploy_to}/shared/flickr.yml #{release_path}/config"
+  run "cp #{deploy_to}/shared/slideshare.yml #{release_path}/config"
 end
 
 namespace :deploy do

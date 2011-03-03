@@ -1,8 +1,9 @@
-require 'rayo'
+require '../rayo/lib/rayo'
 
 require 'lib/tags/images_tags.rb'
 require 'lib/tags/aux_tags.rb'
 require 'lib/tags/flickr_tags.rb'
+require 'lib/tags/slideshare_tags.rb'
 
 require 'redcloth'
 
@@ -20,6 +21,7 @@ class Application < Rayo::Application
     c.add_tags AuxTags
     c.add_tags ImagesTags
     c.add_tags FlickrTags
+    c.add_tags SlideshareTags
 
     c.add_domain 'alno.name', /^(local\.|www\.)?alno\.name$/
     c.add_domain 'blog.alno.name', /^(local\.|www\.)?blog\.alno\.name$/

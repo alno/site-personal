@@ -25,3 +25,12 @@ h3. О сайте
     </r:children:each>
   </ul>
 </r:find>
+
+<r:find url="/science">
+  <h3><r:title /></h3>
+  <ul>
+    <r:children:each>
+      <li><r:link /></li>
+    </r:children:each>
+  </ul>
+</r:find>
