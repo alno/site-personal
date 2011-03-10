@@ -35,10 +35,17 @@
         <h2 class="widgettitle">Архив записей</h2>
         <ul class="archive">
             <r:find url="/">
-                <r:children:each by="year" order="desc" limit="10"><li>
+                <r:children:each by="year" order="desc" limit="20"><li>
 					<a href="<r:url />"><r:value name="year" /></a>
                     <ul class="archive">
-						<r:children:each by="month" order="desc" limit="10"><li><a href="<r:url />"><r:month><r:value name="month" /></r:month></a></li></r:children:each>
+						<r:children:each by="month" order="desc" limit="20"><li>
+							<a href="<r:url />"><r:month><r:value name="month" /></r:month></a>
+							<ul class="archive">
+								<r:children:each by="published_at" order="desc" limit="20"><li>
+									<a href="<r:url />"><r:title /></a>
+								</li></r:children:each>
+							</ul>
+						</li></r:children:each>
                     </ul> 
                 </li></r:children:each>
             </r:find>
