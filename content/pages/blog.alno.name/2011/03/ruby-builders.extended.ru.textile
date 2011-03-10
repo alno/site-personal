@@ -1,0 +1,121 @@
+Для начала попробуем сделать что-нибудь попроще - например, создать класс ObjectBuilder, который позволяет устанавливать из блока свойства объекта:
+* Поскольку такой билдер должен хранить в себе ссылку на объект мы унаследуем его от структуры с одним свойством <tt>object</tt>.
+* Метод build будет вызывать переданный блок, передавая туда ссылку на билдер. Внутри блока мы будем обращаться к методам билдера, устанавливающим свойства объекта.
+* Вместо того, чтобы описывать по методу для каждого объекта мы переопределим <tt>method_missing</tt> в котором все неизвестные методы будем направлять объекту.
+Получившийся класс:
+
+<notextile><r:code lang="ruby">
+class ObjectBuilder < Struct.new( :object )
+
+  def build
+    yield self
+  end
+
+  def method_missing( name, *args, &block )
+    object.send "#{name}=", *args, &block
+  end
+
+end
+</r:code></notextile>
+
+Для использования такого класса сначала необходимо создать его экземпляр, передав туда объект, свойства которого должны быть установлены, затем вызвать метод <tt>build</tt> с соответствующим блоком, а затем получить объект назад:
+
+<notextile><r:code lang="ruby">
+class A
+  attr_accessor :a, :b, :c
+end
+
+builder = ObjectBuilder.new A.new
+builder.build do |b|
+  b.a 11
+  b.c 12
+end
+builder.object # <A:0x7fd655d04958 @a=11 @c=12>
+</r:code></notextile>
+
+Поскольку мы перегрузили <tt>method_missing</tt> еще стоит перегрузить метод <tt>respond_to?</tt>. В нашем примере это ни на что не повляет, конечно, но пригодится если мы захотим проверять в рантайме какие методы поддерживает билдер. Итак:
+
+<notextile><r:code lang="ruby">
+  def respond_to?( name, include_private = false )
+    super || object.respond_to?( "#{name}=", include_private )
+  end
+</r:code></notextile>
+
+Теперь начнем улучшать наш код. Сначала неплохо бы избавиться от <tt>b.</tt> - для этого необходимо изменить метод <tt>build</tt>, и вместо передачи в блок билдера вызывать его (блок) в контексте билдера. Для этого используется метод <tt>instance_eval</tt>:
+
+<notextile><r:code lang="ruby">
+  def build( &block )
+    instance_eval &block
+  end
+</r:code></notextile>
+
+Теперь можно писать следующий код:
+
+<notextile><r:code lang="ruby">
+builder = ObjectBuilder.new A.new
+builder.build do
+  a 11
+  c 12
+end
+builder.object # <A:0x7fd655d04958 @a=11 @c=12>
+</r:code></notextile>
+
+Уже более-менее похоже на то, что хотелось получить. Осталось убрать явное создание билдера и получение построенного объекта. Для этого выделим вышеприведенный код в отдельный модуль, которым будем расширять класс:
+
+<notextile><r:code lang="ruby">
+module BuildingSupport
+
+  def build( &block )
+    builder = ObjectBuilder.new self.new
+    builder.build &block
+    builder.object
+  end
+
+end
+</r:code></notextile>
+
+Теперь если мы расширим класс этим модулем, то получим как раз необходимую функциональность:
+
+<notextile><r:code lang="ruby">
+class A
+  extend BuildingSupport
+
+  attr_accessor :a, :b, :c
+end
+
+a = A.build
+  a 11
+  c 12
+end
+a # <A:0x7fd655d04958 @a=11 @c=12>
+</r:code></notextile>
+
+Или даже так (здесь все чуть сложнее, мне пришлось переопределить <tt>client=</tt>):
+
+<notextile><r:code lang="ruby">
+class Client
+  extend BuildingSupport
+
+  attr_accessor :name, :address, :phone
+end
+
+class Order
+  extend BuildingSupport
+
+  attr_accessor :client, :name, :amount
+
+  def client=( c=nil, &block )
+    @client = c || Client.build( &block )
+  end
+end
+
+order = Order.build do
+  name "Book"
+  amount 3
+  client do
+    name "Client name"
+    address "Client address"
+    phone "000-000-000"
+  end
+end
+</r:code></notextile>
