@@ -1,0 +1,7 @@
+<r:description />
+
+h3. Short info
+
+* License: MIT
+* Source code and readme: "https://github.com/alno/balance":https://github.com/alno/balance
+

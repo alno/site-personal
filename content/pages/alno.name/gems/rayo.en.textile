@@ -1,0 +1,8 @@
+<r:description />
+
+Rayo allows to create semi-static websitese. It supports layouts, snippets, different markup and Radius tags.
+
+h3. Short info
+
+* License: MIT
+* Source code and readme: "https://github.com/alno/rayo":https://github.com/alno/rayo

@@ -1,0 +1,7 @@
+<r:description />
+
+h3. Краткая информация
+
+* Лицензия: MIT
+* Исходный код и документация: "https://github.com/alno/balance":https://github.com/alno/balance
+
