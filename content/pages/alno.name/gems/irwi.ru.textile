@@ -1,0 +1,11 @@
+<r:description />
+
+h3. Краткая информация
+
+* Лицензия: MIT
+* Демо: "http://irwi-test.heroku.com/":http://irwi-test.heroku.com/
+* Исходный код и документация: "https://github.com/alno/irwi":https://github.com/alno/irwi
+
+h3. Описание плагина
+
+* "http://blog.alno.name/ru/2009/08/irwi-plugin":http://blog.alno.name/ru/2009/08/irwi-plugin
