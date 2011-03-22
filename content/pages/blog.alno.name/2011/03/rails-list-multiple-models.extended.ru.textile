@@ -19,7 +19,7 @@ SELECT * FROM posts UNION SELECT * FROM questions
 * Необходимо, чтобы Rails как-то распознали к какому классу относится каждая запись.
 * Необходимо, чтобы количество столбцов в каждом из объединяемых запросов совпадало.
 
-Сначала решим первую проблему. Распознавание класса записи будет производится за счет механизмо, используемого в Rails для загрузки моделей с наследованием, а именно наличия поля <tt>type</tt>. Чтобы корректно это использовать, добавим в каждую модель поле <tt>type</tt> и установим ему в качестве значения по умолчанию имя класса модели.
+Сначала решим первую проблему. Распознавание класса записи будет производится за счет механизма, используемого в Rails для загрузки моделей с наследованием, а именно наличия поля <tt>type</tt>. Чтобы корректно это использовать, добавим в каждую модель поле <tt>type</tt> и установим ему в качестве значения по умолчанию имя класса модели.
 Тогда код миграция для создания моделей может выглядеть следующим образом:
 
 <notextile><r:code lang="ruby">
@@ -39,13 +39,13 @@ create_table :posts do |t|
 end
 </r:code></notextile>
 
-В процессе загрузки класс будет определен на основе значения поля <tt>type</tt> в запросе, что и необходимо в нашем случае.
+В процессе загрузки класс будет определен на основе значения поля <tt>type</tt> в запросе, что и необходимо в нашем случае. Чтобы убедится, что это действительно так можно заглянуть в исходный код Rails - в методы "find_by-sql":http://github.com/rails/rails/blob/97e9d8860b277e5ca9f4187c213ddd35d7f76e9b/activerecord/lib/active_record/base.rb#L466 и "instantiate":https://github.com/rails/rails/blob/97e9d8860b277e5ca9f4187c213ddd35d7f76e9b/activerecord/lib/active_record/base.rb#L907
 
-Теперь перейдем к второй проблеме. Она решается достаточно просто - необходимо явно перечислить все необходимые столбцы и где дополнить их значениями NULL:
+Теперь перейдем ко второй проблеме. Она решается достаточно просто - необходимо явно перечислить все необходимые столбцы и дополнить их значениями <tt>NULL</tt>:
 
 <notextile><r:code lang="sql">
 SELECT id, type, created_at, updated_at, title, description, NULL AS text FROM posts 
-UNION SELECT id, type, created_at, updated_at, NULL as title, NULL AS description, text FROM questions
+UNION SELECT id, type, created_at, updated_at, NULL AS title, NULL AS description, text FROM questions
 ORDER BY created_at DESC
 </r:code></notextile>
 
@@ -55,7 +55,7 @@ ORDER BY created_at DESC
 class IndexController < ApplicationController
 
   def index
-    @models = Post.find_by_sql("SELECT id, type, created_at, updated_at, title, description, NULL AS text FROM posts UNION SELECT id, type, created_at, updated_at, NULL as title, NULL AS description, text FROM questions ORDER BY created_at DESC")
+    @models = Post.find_by_sql("SELECT id, type, created_at, updated_at, title, description, NULL AS text FROM posts UNION SELECT id, type, created_at, updated_at, NULL AS title, NULL AS description, text FROM questions ORDER BY created_at DESC")
   end
 
 end
