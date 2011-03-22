@@ -1,0 +1,70 @@
+* Можно загрузить списки обоих моделей большей длины и потом их объединить в Ruby-коде. В  этом случае основная проблема возникает с организацией постраничного вывода, поскольку мы не знаем сколько моделей каждого типа окажется на странице. И если для первой страницы еще можно загрузить из базы данных по максимальному числу моделей (сколько помещается на странице) каждого типа, то для последующих страниц необходимо еще задавать нижнюю границу - а это намного сложнее.
+* Можно использовать наследование и хранить обе модели в одной таблице. Этот способ хорош, но не всегда применим (например, модели могут быть слишком разными, чтобы их хранить в одной таблице или схема базы данных уже может быть зафиксирована). Кроме того, в случае если в разных местах должны выводится различные пары моделей это может привести к тому, что все модели приложения придется поместить в одну таблицу.
+* Можно использовать операцию <tt>UNION</tt> и особенности загрузки моделей в Rails. Об этом и пойдет речь ниже. Основным минусом этого подхода является необходимость использования метода <tt>find_by_sql</tt> с достаточно громоздким запросом для загрузки моделей.
+
+Итак, метод основан на использовании операции <tt>UNION</tt>. Она поддерживается основными БД, используемыми при разработке:
+* Sqlite - "http://www.sqlite.org/syntaxdiagrams.html#compound-operator":http://www.sqlite.org/syntaxdiagrams.html#compound-operator
+* MySQL - "http://dev.mysql.com/doc/refman/5.0/en/union.html":http://dev.mysql.com/doc/refman/5.0/en/union.html
+* PostgreSQL - "http://www.postgresql.org/docs/8.3/interactive/queries-union.html":http://www.postgresql.org/docs/8.3/interactive/queries-union.html
+
+Суть операции состоит в том, что результаты нескольких запросов объединяются в один, к которому могут быть применены <tt>OFFSЕT</tt> и <tt>LIMIT</tt>. 
+
+Таким образом, для того, чтобы вывести в одном списке модели <tt>Post</tt> и <tt>Question</tt> мы можем сделать что-то вроде:
+
+<notextile><r:code lang="sql">
+SELECT * FROM posts UNION SELECT * FROM questions
+</r:code></notextile>
+
+Однако, не все так просто, есть два подводных камня:
+* Необходимо, чтобы Rails как-то распознали к какому классу относится каждая запись.
+* Необходимо, чтобы количество столбцов в каждом из объединяемых запросов совпадало.
+
+Сначала решим первую проблему. Распознавание класса записи будет производится за счет механизмо, используемого в Rails для загрузки моделей с наследованием, а именно наличия поля <tt>type</tt>. Чтобы корректно это использовать, добавим в каждую модель поле <tt>type</tt> и установим ему в качестве значения по умолчанию имя класса модели.
+Тогда код миграция для создания моделей может выглядеть следующим образом:
+
+<notextile><r:code lang="ruby">
+create_table :questions do |t|
+  t.text :text
+  t.string :type, :null => false, :default => 'Question'
+
+  t.timestamps
+end
+    
+create_table :posts do |t|
+  t.string :title
+  t.text :description
+  t.string :type, :null => false, :default => 'Post'
+
+  t.timestamps
+end
+</r:code></notextile>
+
+В процессе загрузки класс будет определен на основе значения поля <tt>type</tt> в запросе, что и необходимо в нашем случае.
+
+Теперь перейдем к второй проблеме. Она решается достаточно просто - необходимо явно перечислить все необходимые столбцы и где дополнить их значениями NULL:
+
+<notextile><r:code lang="sql">
+SELECT id, type, created_at, updated_at, title, description, NULL AS text FROM posts 
+UNION SELECT id, type, created_at, updated_at, NULL as title, NULL AS description, text FROM questions
+ORDER BY created_at DESC
+</r:code></notextile>
+
+Все, практически все сделано. Можно еще добавить <tt>LIMIT</tt> и <tt>OFFSET</tt> для постраничного вывода и написать код в контроллере и виде:
+
+<notextile><r:code lang="ruby">
+class IndexController < ApplicationController
+
+  def index
+    @models = Post.find_by_sql("SELECT id, type, created_at, updated_at, title, description, NULL AS text FROM posts UNION SELECT id, type, created_at, updated_at, NULL as title, NULL AS description, text FROM questions ORDER BY created_at DESC")
+  end
+
+end
+</r:code></notextile>
+
+<notextile><r:code lang="ruby">
+<% @models.each do |m|%>
+  <%=m.inspect%><br />
+<%end %>
+</r:code></notextile>
+
+Все! Для тех, кому интересно посмотреть это в действии я выложил "архив с проектом для Rails3":/files/rails_test_multilist.zip

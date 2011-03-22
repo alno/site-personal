@@ -1,0 +1,5 @@
+title: "Получение списка из различных моделей в Ruby on Rails"
+description: "О том как загрузить одним запросом и вывести в одном списке несколько Rails-моделей"
+keywords: "ruby, ruby on rails"
+layout: blog_entry
+published_at: 2011-03-22T20:03:31+00:00
