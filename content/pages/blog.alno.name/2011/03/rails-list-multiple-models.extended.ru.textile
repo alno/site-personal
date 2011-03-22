@@ -39,7 +39,7 @@ create_table :posts do |t|
 end
 </r:code></notextile>
 
-В процессе загрузки класс будет определен на основе значения поля <tt>type</tt> в запросе, что и необходимо в нашем случае. Чтобы убедится, что это действительно так можно заглянуть в исходный код Rails - в методы "find_by-sql":http://github.com/rails/rails/blob/97e9d8860b277e5ca9f4187c213ddd35d7f76e9b/activerecord/lib/active_record/base.rb#L466 и "instantiate":https://github.com/rails/rails/blob/97e9d8860b277e5ca9f4187c213ddd35d7f76e9b/activerecord/lib/active_record/base.rb#L907
+В процессе загрузки класс будет определен на основе значения поля <tt>type</tt> в запросе, что и необходимо в нашем случае. Чтобы убедится, что это действительно так можно заглянуть в исходный код Rails - в методы "find_by_sql":http://github.com/rails/rails/blob/97e9d8860b277e5ca9f4187c213ddd35d7f76e9b/activerecord/lib/active_record/base.rb#L466 и "instantiate":https://github.com/rails/rails/blob/97e9d8860b277e5ca9f4187c213ddd35d7f76e9b/activerecord/lib/active_record/base.rb#L907
 
 Теперь перейдем ко второй проблеме. Она решается достаточно просто - необходимо явно перечислить все необходимые столбцы и дополнить их значениями <tt>NULL</tt>:
 
