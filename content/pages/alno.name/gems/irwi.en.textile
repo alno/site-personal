@@ -5,4 +5,3 @@ h3. Short info
 * License: MIT
 * Demo: "http://irwi-test.heroku.com/":http://irwi-test.heroku.com/
 * Source code and readme: "https://github.com/alno/irwi":https://github.com/alno/irwi
-

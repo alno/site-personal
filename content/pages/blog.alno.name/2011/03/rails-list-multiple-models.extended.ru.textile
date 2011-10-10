@@ -7,7 +7,7 @@
 * MySQL - "http://dev.mysql.com/doc/refman/5.0/en/union.html":http://dev.mysql.com/doc/refman/5.0/en/union.html
 * PostgreSQL - "http://www.postgresql.org/docs/8.3/interactive/queries-union.html":http://www.postgresql.org/docs/8.3/interactive/queries-union.html
 
-Суть операции состоит в том, что результаты нескольких запросов объединяются в один, к которому могут быть применены <tt>OFFSЕT</tt> и <tt>LIMIT</tt>. 
+Суть операции состоит в том, что результаты нескольких запросов объединяются в один, к которому могут быть применены <tt>OFFSЕT</tt> и <tt>LIMIT</tt>.
 
 Таким образом, для того, чтобы вывести в одном списке модели <tt>Post</tt> и <tt>Question</tt> мы можем сделать что-то вроде:
 
@@ -29,7 +29,7 @@ create_table :questions do |t|
 
   t.timestamps
 end
-    
+
 create_table :posts do |t|
   t.string :title
   t.text :description
@@ -44,7 +44,7 @@ end
 Теперь перейдем ко второй проблеме. Она решается достаточно просто - необходимо явно перечислить все необходимые столбцы и дополнить их значениями <tt>NULL</tt>:
 
 <notextile><r:code lang="sql">
-SELECT id, type, created_at, updated_at, title, description, NULL AS text FROM posts 
+SELECT id, type, created_at, updated_at, title, description, NULL AS text FROM posts
 UNION SELECT id, type, created_at, updated_at, NULL AS title, NULL AS description, text FROM questions
 ORDER BY created_at DESC
 </r:code></notextile>
