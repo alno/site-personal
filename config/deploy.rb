@@ -23,12 +23,12 @@ namespace :deploy do
 
   desc "Restarting unicorn"
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "cd #{deploy_to}/current ; ([ -f tmp/pids/unicorn.pid ] && kill -USR2 `cat tmp/pids/unicorn.pid`) || bundle exec unicorn -c config/unicorn.rb -E production -D"
+    run "cd #{current_path} ; ([ -f tmp/pids/unicorn.pid ] && kill -USR2 `cat tmp/pids/unicorn.pid`) || bundle exec unicorn -c config/unicorn.rb -E production -D"
   end
 
   desc "Rude restart application"
   task :rude_restart, :roles => :app do
-    run "cd #{deploy_to}/current ; pkill unicorn; sleep 0.5; pkill -9 unicorn; sleep 0.5 ; bundle exec unicorn_rails -c config/unicorn.rb -E production -D "
+    run "cd #{current_path} ; pkill unicorn; sleep 0.5; pkill -9 unicorn; sleep 0.5 ; bundle exec unicorn_rails -c config/unicorn.rb -E production -D "
   end
 
   task :start, :roles => :app do
